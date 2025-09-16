@@ -193,7 +193,7 @@ const fr = {
     portPH: "ex. Casablanca / Tanger-Med", anyReq: "Demandes spécifiques ?",
     send: "Envoyer", sent: "Merci — nous avons bien reçu votre message."
   }
-} as const;
+} as typeof en;
 
 /* ---------- Page ---------- */
 export default function Home() {
