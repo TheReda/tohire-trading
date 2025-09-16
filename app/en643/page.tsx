@@ -1,5 +1,6 @@
 // app/en643/page.tsx
 import React from "react";
+import Link from "next/link";
 
 export const metadata = {
   title: "EN643 — Focus Grades • ToHiRe Trading Morocco",
@@ -90,9 +91,9 @@ export default function EN643Page() {
           </div>
 
           <div className="mt-10">
-            <a href="/" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 font-semibold hover:bg-white/5">
+            <Link href="/" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 font-semibold hover:bg-white/5">
               ← Back to homepage
-            </a>
+            </Link>
           </div>
         </div>
       </section>
