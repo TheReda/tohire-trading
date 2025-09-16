@@ -169,7 +169,7 @@ const en = {
     use3: "To analyze traffic (aggregated)",
     note: "We will update this draft with company identifiers (ICE/RC, VAT) and contact email once confirmed."
   }
-} as const;
+};
 
 const fr = {
   ...en,
