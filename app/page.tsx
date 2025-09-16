@@ -171,7 +171,7 @@ const en = {
   }
 } as const;
 
-const fr: typeof en = {
+const fr = {
   ...en,
   nav: { materials: "Matériaux", solutions: "Solutions", impact: "Impact", resources: "Ressources", contact: "Contact" },
   hero: {
