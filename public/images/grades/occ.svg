@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="#0f1520"/>
+  <rect x="20" y="20" width="760" height="560" rx="16" fill="url(#g)" opacity="0.18"/>
+  <g fill="#e2e8f0" font-family="ui-sans-serif, system-ui" text-anchor="middle">
+    <text x="400" y="300" font-size="96" font-weight="800">OCC</text>
+    <text x="400" y="360" font-size="28" opacity="0.9">EN643 1.05 — Old corrugated containers</text>
+  </g>
+</svg>

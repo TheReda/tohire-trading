@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0f1520"/>
+  <rect x="20" y="20" width="760" height="560" rx="16" fill="#14b8a6" opacity="0.12"/>
+  <g fill="#e2e8f0" font-family="ui-sans-serif, system-ui" text-anchor="middle">
+    <text x="400" y="300" font-size="72" font-weight="800">4.01 Shavings</text>
+    <text x="400" y="360" font-size="26" opacity="0.9">New shavings of corrugated board</text>
+  </g>
+</svg>
