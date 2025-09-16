@@ -3,6 +3,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 
+const PrivacyDraft = (_props: any) => null;
+
 /* ---------- Types & constants ---------- */
 type LangKey = "en" | "fr";
 const EMAIL_TO = "reda.elhattab@outlook.com";
