@@ -17,12 +17,12 @@ const t = { duration: 0.4, ease } as const;
     <section id="impact" className="border-t border-white/5 bg-[--panel]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-2 gap-10 items-center">
         <div>
-          <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t} className="text-2xl sm:text-3xl font-bold">{title}</motion.h2>
-          <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t} transition={{ ...t, delay:.05}} className="text-[--muted] mt-2">{subtitle}</motion.p>
-          <motion.ul initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t} transition={{ ...t, delay:.1}} className="mt-4 grid gap-2 text-sm text-slate-300 list-disc pl-5">
+          <motion.h2 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-2xl sm:text-3xl font-bold">{title}</motion.h2>
+          <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...t, delay:.05}} className="text-[--muted] mt-2">{subtitle}</motion.p>
+          <motion.ul initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...t, delay:.1}} className="mt-4 grid gap-2 text-sm text-slate-300 list-disc pl-5">
             {points.map((p,i)=>(<li key={i}>{p}</li>))}
           </motion.ul>
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t} transition={{ ...t, delay:.15}} className="mt-6 grid sm:grid-cols-2 gap-4">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...t, delay:.15}} className="mt-6 grid sm:grid-cols-2 gap-4">
             {stats.map((s,i)=>(
               <div key={i} className="rounded-xl border border-white/10 p-5 bg-[--bg]">
                 <div className="text-2xl font-extrabold text-teal-300">{s.value}</div>
@@ -30,7 +30,7 @@ const t = { duration: 0.4, ease } as const;
               </div>
             ))}
           </motion.div>
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={t} transition={{ ...t, delay:.2}} className="mt-3 text-xs text-[--muted]">{note}</motion.div>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ ...t, delay:.2}} className="mt-3 text-xs text-[--muted]">{note}</motion.div>
         </div>
         <div className="relative rounded-2xl border border-white/10 overflow-hidden bg-gradient-to-b from-[#081018] to-[#0b0f14]">
           <div className="absolute inset-0 opacity-30" style={{background:"radial-gradient(1200px 400px at 20% 20%, rgba(20,184,166,.25), transparent), radial-gradient(800px 300px at 80% 60%, rgba(14,165,233,.2), transparent)"}}/>
