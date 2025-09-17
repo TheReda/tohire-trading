@@ -59,7 +59,6 @@ export default function ContactForm() {
       });
       const data = await res.json();
       if (!res.ok || !data?.ok) throw new Error(data?.error || "Failed to send");
-
       setOk(true);
       setIntent("general");
       setName(""); setCompany(""); setEmail(""); setPhone(""); setCountry("");
@@ -72,7 +71,7 @@ export default function ContactForm() {
     }
   }
 
-  // ——— Aesthetics ———
+  // —— Style tokens
   const wrap   = "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
   const h1     = "text-[20px] font-semibold tracking-tight text-slate-100";
   const sub    = "text-[13px] text-slate-300";
@@ -85,7 +84,6 @@ export default function ContactForm() {
 
   return (
     <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrap}>
-      {/* Header */}
       <div className="px-6 pt-6">
         <div className="inline-flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.10)]" />
@@ -100,7 +98,7 @@ export default function ContactForm() {
               type="button"
               onClick={() => setIntent(i)}
               className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all ${
-                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10"
+                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
               }`}
               aria-pressed={intent === i}
             >
@@ -111,13 +109,13 @@ export default function ContactForm() {
       </div>
 
       <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-6">
-        {/* Honeypot */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Blocks – two columns on md+ to cut scrolling */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Blocks in two columns from small screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {/* Contact */}
-          <SectionCard title="Contact">
+          <section className={card}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-4">Contact</h3>
             <TwoCol>
               <Col>
                 <Field label="Name *"><input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
@@ -129,10 +127,11 @@ export default function ContactForm() {
                 <Field label="Phone"><input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
               </Col>
             </TwoCol>
-          </SectionCard>
+          </section>
 
           {/* Trade */}
-          <SectionCard title="Trade">
+          <section className={card}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-4">Trade</h3>
             <TwoCol>
               <Col>
                 <Field label="Material">
@@ -160,10 +159,11 @@ export default function ContactForm() {
                 </Field>
               </Col>
             </TwoCol>
-          </SectionCard>
+          </section>
 
           {/* Logistics */}
-          <SectionCard title="Logistics">
+          <section className={card}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-4">Logistics</h3>
             <TwoCol>
               <Col>
                 <Field label="Incoterm">
@@ -178,10 +178,11 @@ export default function ContactForm() {
                 </Field>
               </Col>
             </TwoCol>
-          </SectionCard>
+          </section>
 
-          {/* Message – spans both columns */}
-          <SectionCard title="Message" spanBoth>
+          {/* Message – span both columns */}
+          <section className={card + " sm:col-span-2"}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-4">Message</h3>
             <Field label="Message *">
               <textarea
                 className={input + " min-h-[120px] resize-y leading-6"}
@@ -192,7 +193,7 @@ export default function ContactForm() {
                 minLength={10}
               />
             </Field>
-          </SectionCard>
+          </section>
         </div>
 
         {/* Turnstile + actions */}
@@ -218,37 +219,22 @@ export default function ContactForm() {
   );
 }
 
-/* ——— Layout helpers ——— */
+/* -------- Layout helpers (FLEX with fixed spacer) -------- */
 
-// Section card container
-function SectionCard({ title, spanBoth = false, children }: { title: string; spanBoth?: boolean; children: React.ReactNode }) {
-  return (
-    <section className={`rounded-xl border border-white/10 bg-[--panel] p-6 ${spanBoth ? "md:col-span-2" : ""}`}>
-      <h3 className="text-sm font-semibold text-slate-100 mb-4">{title}</h3>
-      {children}
-    </section>
-  );
-}
-
-/** TwoCol:
- * Ensures a FIXED spacer between left/right columns on md+:
- * grid-cols-[1fr_2.25rem_1fr] ⇒ about 36px of whitespace in the middle.
- */
 function TwoCol({ children }: { children: React.ReactNode }) {
   const [left, right] = Children.toArray(children);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[1fr_2.25rem_1fr] gap-y-5 items-start">
-      <div className="md:pr-2">{left}</div>
-      <div className="hidden md:block" />
-      <div className="md:pl-2">{right}</div>
+    <div className="flex flex-col sm:flex-row sm:items-start">
+      <div className="sm:flex-1 sm:pr-3">{left}</div>
+      {/* <-- REAL spacer so inputs never touch --> */}
+      <div className="hidden sm:block w-8 shrink-0" />
+      <div className="sm:flex-1 sm:pl-3">{right}</div>
     </div>
   );
 }
-
 function Col({ children }: { children: React.ReactNode }) {
   return <div className="space-y-4">{children}</div>;
 }
-
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="grid gap-2">
