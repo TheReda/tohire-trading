@@ -84,7 +84,7 @@ export default function ContactForm() {
   const selectCls = inputCls + " bg-[--panel]";
   const hintCls   = "mt-1 text-[11px] text-slate-400";
   // CLEARER space BETWEEN columns: 1.5rem (~24px) horizontally, a bit tighter vertically
-  const rowCls    = "grid md:grid-cols-2 gap-y-3 gap-x-6";
+  const rowCls    = "grid md:grid-cols-2 gap-y-4 gap-x-8 md:gap-x-12";
 
   const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
