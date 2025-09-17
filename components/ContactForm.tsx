@@ -33,11 +33,11 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
 
   // UX
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken]   = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [ok, setOk]     = useState<null | boolean>(null);
-  const [err, setErr]   = useState<string | null>(null);
-  const [honey, setHoney] = useState(""); // honeypot
+  const [ok, setOk]         = useState<null | boolean>(null);
+  const [err, setErr]       = useState<string | null>(null);
+  const [honey, setHoney]   = useState(""); // honeypot
 
   const isWastepaper = useMemo(() => material === "Wastepaper", [material]);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
@@ -72,118 +72,149 @@ export default function ContactForm() {
     }
   }
 
-  // Compact styles (smaller fonts/spacing, bigger click targets)
-  const labelCls  = "block text-[11px] font-semibold tracking-wide text-slate-300";
-  const inputCls  = "mt-1 w-full rounded-lg border border-white/15 bg-transparent px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-teal-500/35";
+  /* ——— Airbnb-ish styles ——— */
+  // softer surfaces, subtle borders, roomy line-height, clear hierarchy
+  const wrapCls   = "rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.25)]";
+  const titleCls  = "text-xl font-semibold tracking-tight text-slate-100";
+  const subCls    = "text-sm text-slate-300";
+  const labelCls  = "text-[13px] font-semibold text-slate-200";
+  const inputCls  = "mt-1.5 w-full rounded-xl border border-white/15 bg-white/7 backdrop-blur px-4 py-3 text-[15px] text-slate-100 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[--brand]/50 focus:border-[--brand]/40";
   const selectCls = inputCls + " bg-[--panel]";
+  const hintCls   = "mt-1 text-[12px] text-slate-400";
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4">
+    <div className={wrapCls}>
+      {/* Header */}
+      <div className="px-6 pt-6">
+        <div className="inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-[--brand]" />
+          <div className={titleCls}>Tell us about your request</div>
+        </div>
+        <p className={subCls + " mt-1"}>We’ll reply within one business day.</p>
 
-      {/* Honeypot (hidden) */}
-      <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
-
-      {/* Intent switch (compact) */}
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs font-semibold text-slate-300">Intent</span>
-        <div className="inline-flex rounded-lg overflow-hidden border border-white/10">
+        {/* Intent pill switch */}
+        <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {INTENTS.map((i) => (
-            <label key={i} className={`px-2.5 py-1 text-xs font-semibold cursor-pointer ${intent === i ? "bg-[--brand] text-black" : "text-slate-300 hover:bg-white/5"}`}>
-              <input type="radio" name="intent" value={i} checked={intent === i} onChange={() => setIntent(i)} className="sr-only" />
-              {i.toUpperCase()}
-            </label>
+            <button
+              key={i}
+              type="button"
+              onClick={() => setIntent(i)}
+              className={`px-3.5 py-1.5 text-sm font-semibold rounded-full transition ${
+                intent === i
+                  ? "bg-[--brand] text-black shadow"
+                  : "text-slate-300 hover:bg-white/10"
+              }`}
+              aria-pressed={intent === i}
+            >
+              {i === "buy" ? "Buy" : i === "sell" ? "Sell" : "General"}
+            </button>
           ))}
         </div>
       </div>
 
-      <Divider />
+      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-6">
+        {/* Honeypot (hidden) */}
+        <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-      {/* Contact (2 cols on md) */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} required minLength={2} /></Field>
-        <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} /></Field>
-        <Field label="Email *"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} required /></Field>
-        <Field label="Phone"><input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
-        <Field label="Country"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} /></Field>
-      </div>
+        {/* Contact */}
+        <div className="grid md:grid-cols-2 gap-5">
+          <div>
+            <label className={labelCls}>Name *</label>
+            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} />
+          </div>
+          <div>
+            <label className={labelCls}>Company</label>
+            <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
+          </div>
+          <div>
+            <label className={labelCls}>Email *</label>
+            <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+          </div>
+          <div>
+            <label className={labelCls}>Phone</label>
+            <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
+          </div>
+          <div className="md:col-span-2">
+            <label className={labelCls}>Country</label>
+            <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." />
+          </div>
+        </div>
 
-      <Divider />
+        {/* Trade */}
+        <div className="grid md:grid-cols-2 gap-5">
+          <div>
+            <label className={labelCls}>Material</label>
+            <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
+              <option>Wastepaper</option>
+              <option>Plastics</option>
+              <option>Metals</option>
+            </select>
+          </div>
 
-      {/* Trade (2 cols on md) */}
-      <div className="grid md:grid-cols-2 gap-4">
-        <Field label="Material">
-          <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
-            <option>Wastepaper</option>
-            <option>Plastics</option>
-            <option>Metals</option>
-          </select>
-        </Field>
+          <div>
+            <label className={labelCls}>Grade</label>
+            <select
+              className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              disabled={!isWastepaper}
+            >
+              {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+            </select>
+            {!isWastepaper && (
+              <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>
+            )}
+          </div>
 
-        <Field label="Grade">
-          <select
-            className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
-            disabled={!isWastepaper}
+          <div>
+            <label className={labelCls}>Incoterm</label>
+            <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
+              {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label className={labelCls}>Port</label>
+            <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className={labelCls}>Quantity</label>
+            <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
+          </div>
+        </div>
+
+        {/* Message */}
+        <div>
+          <label className={labelCls}>Message *</label>
+          <textarea
+            className={inputCls + " min-h-[160px] resize-y leading-6"}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write a short description — specs, timings, constraints…"
+            required
+            minLength={10}
+          />
+        </div>
+
+        {/* Turnstile + actions */}
+        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-4">
+          <div className="opacity-90">
+            <Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} />
+          </div>
+          <button
+            type="submit"
+            disabled={loading || !token}
+            className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60"
           >
-            {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
-          </select>
-          {!isWastepaper && (
-            <p className="mt-1 text-[11px] text-slate-400">
-              For plastics/metals, please mention the exact grade in your message.
-            </p>
-          )}
-        </Field>
+            {loading ? "Sending…" : "Send message"}
+          </button>
+        </div>
 
-        <Field label="Incoterm">
-          <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
-            {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
-          </select>
-        </Field>
-
-        <Field label="Port">
-          <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
-        </Field>
-
-        <Field label="Quantity" className="md:col-span-2">
-          <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
-        </Field>
-      </div>
-
-      <Divider />
-
-      {/* Message */}
-      <div>
-        <Field label="Message *">
-          <textarea className={inputCls + " min-h-[140px] resize-y"} value={message} onChange={(e) => setMessage(e.target.value)} required minLength={10} placeholder="Write your message here..." />
-        </Field>
-        <p className="mt-1 text-[11px] text-[--muted]">We’ll reply within 1 business day.</p>
-      </div>
-
-      {/* Turnstile + actions (stack on mobile) */}
-      <div className="grid sm:grid-cols-[1fr_auto] items-center gap-3">
-        <div><Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} /></div>
-        <button type="submit" disabled={loading || !token} className="inline-flex items-center justify-center rounded-lg px-4 py-2.5 border border-white/15 font-semibold">
-          {loading ? "Sending..." : "Send message"}
-        </button>
-      </div>
-
-      {/* Status */}
-      {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
-      {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
-    </form>
-  );
-}
-
-function Divider() {
-  return <div className="border-t border-white/10 my-1" />;
-}
-
-function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
-  return (
-    <label className={`grid gap-1 ${className}`}>
-      <span className="block text-[11px] font-semibold tracking-wide text-slate-300">{label}</span>
-      {children}
-    </label>
+        {/* Status */}
+        {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
+        {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
+      </form>
+    </div>
   );
 }

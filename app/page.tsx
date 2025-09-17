@@ -584,12 +584,12 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
     <div className="fixed inset-0 z-50">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative h-full w-full grid place-items-center p-4">
-        <div className="w-full max-w-[720px] max-h-[90vh] overflow-y-auto rounded-xl bg-[--panel] text-white shadow-xl border border-white/10">
+        <div className="w-full max-w-[800px] max-h-[90vh] overflow-y-auto rounded-xl bg-[--panel] text-white shadow-xl border border-white/10">
           <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
             <div className="font-semibold">{title}</div>
             <button aria-label="Close" onClick={onClose} className="p-2 rounded-lg hover:bg-white/5"><Close className="h-5 w-5" /></button>
           </div>
-          <div className="px-5 py-4">{children}</div>
+          <div className="px-6 py-5">{children}</div>
         </div>
       </div>
     </div>
