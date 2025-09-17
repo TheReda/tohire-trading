@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import ContactForm from "../components/ContactForm";
+import ImpactShowcase from "../components/ImpactShowcase";
 import ContactDock from "../components/ContactDock";
 
 /* ---------- Types & misc ---------- */
@@ -304,21 +305,7 @@ export default function Home() {
       </section>
 
       {/* Impact */}
-      <section id="impact" className="border-t border-white/5 bg-[--panel]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold">{t.impact.title}</h2>
-            <p className="text-[--muted] mt-2">{t.impact.subtitle}</p>
-            <ul className="mt-4 grid gap-2 text-sm text-slate-300 list-disc pl-5">
-              {t.impact.points.map((p, i) => <li key={i}>{p}</li>)}
-            </ul>
-          </div>
-          <div className="rounded-2xl border border-white/10 p-6 bg-[--bg] shadow-sm">
-            <Stats />
-            <div className="mt-3 text-xs text-[--muted]">{t.impact.note}</div>
-          </div>
-        </div>
-      </section>
+      {/*impact*/}<ImpactShowcase title={t.impact.title} subtitle={t.impact.subtitle} points={t.impact.points} note={t.impact.note} />
 
       {/* Resources */}
       <section id="resources" className="border-t border-white/5 bg-[--bg]">
