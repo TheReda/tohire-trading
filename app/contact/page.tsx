@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Turnstile from "@marsidev/react-turnstile";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function ContactPage() {
   const [name, setName] = useState("");
