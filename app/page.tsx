@@ -238,9 +238,17 @@ export default function Home() {
             <h1 className="mt-4 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">{t.hero.title}</h1>
             <p className="mt-4 text-[--muted] text-base sm:text-lg max-w-xl">{t.hero.subtitle}</p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="#contact" className="rounded-xl bg-[--brand] text-black px-5 py-3 font-semibold shadow hover:opacity-90">{t.cta.sell}</a>
-              <a href="#materials" className="rounded-xl border border-white/10 px-5 py-3 font-semibold hover:bg-white/5">{t.cta.explore}</a>
-            </div>
+    <button
+      type="button"
+      onClick={() => setContactOpen(true)}
+      className="rounded-xl bg-[--brand] text-black px-5 py-3 font-semibold shadow hover:opacity-90"
+    >
+      {t.cta.sell}
+    </button>
+    <a href="#materials" className="rounded-xl border border-white/10 px-5 py-3 font-semibold hover:bg-white/5">
+      {t.cta.explore}
+    </a>
+  </div>
             <div className="mt-6 flex items-center gap-4 text-sm text-[--muted]">
               <div className="flex items-center gap-2"><Shield className="h-4 w-4" />{t.hero.p1}</div>
               <div className="flex items-center gap-2"><Globe className="h-4 w-4" />{t.hero.p2}</div>
@@ -392,12 +400,12 @@ export default function Home() {
       </footer>
 
       {/* Floating quick actions */}
-      {contactOpen && (
-        <Modal title="Contact us" onClose={() => setContactOpen(false)}>
-          <div className="max-w-3xl"><ContactForm /></div>
-        </Modal>
-      )}
-      <ContactDock />
+{contactOpen && (
+  <Modal title="Contact us" onClose={() => setContactOpen(false)}>
+    <div className="max-w-3xl"><ContactForm /></div>
+  </Modal>
+)}
+<ContactDock />
       {/* Cookie consent */}
       {consent === "unknown" && (
         <div className="fixed bottom-4 inset-x-0 px-4 z-50">
