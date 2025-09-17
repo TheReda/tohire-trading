@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import ContactDock from "../components/ContactDock";
 import ContactForm from "../components/ContactForm";
 
 const PrivacyDraft = (_props: any) => null;
@@ -466,7 +467,9 @@ export default function Home() {
 
 
       {/* Cookie consent */}
-      {consent === "unknown" && (
+      <ContactDock />
+
+      {consent === "unknown" {consent === "unknown" && ({consent === "unknown" && ( (
         <div className="fixed bottom-4 inset-x-0 px-4 z-50">
           <div className="max-w-4xl mx-auto rounded-2xl border border-white/10 bg-[--panel] p-4 shadow-lg">
             <div className="text-sm text-slate-200 font-semibold">{t.cookies.title}</div>
