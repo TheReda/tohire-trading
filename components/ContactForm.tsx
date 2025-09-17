@@ -119,7 +119,7 @@ export default function ContactForm() {
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
         {/* ——— Blocks in two columns on xl ——— */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contact */}
           <SectionCard title="Contact">
             <TwoCol>
@@ -238,7 +238,7 @@ function SectionCard({ title, spanBoth = false, children }: { title: string; spa
 // True two-column layout with a visible vertical divider + real gutters
 function TwoCol({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-x-10">
+    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-12">
       {/* vertical divider only on md+ */}
       <div className="hidden md:block absolute inset-y-0 left-1/2 w-px bg-white/10 pointer-events-none" />
       {children}
@@ -248,7 +248,7 @@ function TwoCol({ children }: { children: React.ReactNode }) {
 
 // Column wrapper adds inner spacing and side padding to create a gutter
 function Col({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-4 md:px-5">{children}</div>;
+  return <div className="space-y-5 md:px-6">{children}</div>;
 }
 
 // Field wrapper with subtle focus glow
