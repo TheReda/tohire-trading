@@ -8,7 +8,7 @@ const PrivacyDraft = (_props: any) => null;
 
 /* ---------- Types & constants ---------- */
 type LangKey = "en" | "fr";
-const EMAIL_TO = "reda.elhattab@outlook.com";
+const EMAIL_TO = "contact@tohiretrading.com";
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || "G-XXXXXXX";
 
 /* ---------- EN643 grades (with photos in /public/images/grades) ---------- */
