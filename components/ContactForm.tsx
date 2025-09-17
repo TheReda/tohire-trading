@@ -27,6 +27,8 @@ export default function ContactForm() {
   const [material, setMaterial] = useState("Wastepaper");
   const [grade, setGrade]       = useState(GRADES[0]);
   const [qty, setQty]           = useState("");
+
+  // Logistics
   const [incoterm, setIncoterm] = useState<(typeof INCOTERMS)[number]>(INCOTERMS[0]);
   const [port, setPort]         = useState("");
 
@@ -53,8 +55,7 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           intent, name, company, email, phone, country,
-          material, grade, qty, incoterm, port,
-          message, token, honey,
+          material, grade, qty, incoterm, port, message, token, honey,
         }),
       });
       const data = await res.json();
@@ -77,19 +78,13 @@ export default function ContactForm() {
   const wrapCls   = "rounded-2xl border border-white/10 bg-white/7 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
   const titleCls  = "text-[20px] font-semibold tracking-tight text-slate-100";
   const subCls    = "text-[13px] text-slate-300";
+  const cardCls   = "rounded-xl border border-white/10 bg-[--panel] p-5";
   const labelCls  = "text-[11px] font-semibold text-slate-200";
-
-  // SHORT input height + crisp focus ring
   const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
   const inputCls  = inputBase + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
   const selectCls = inputCls + " bg-[--panel]";
   const hintCls   = "mt-1 text-[11px] text-slate-400";
-
   const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
-
-  // Grid helpers: true 12-column layout with a big gutter so columns NEVER touch
-  const col  = "col-span-12 md:col-span-6";
-  const full = "col-span-12";
 
   return (
     <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrapCls}>
@@ -100,10 +95,8 @@ export default function ContactForm() {
           <div className={titleCls}>Tell us about your request</div>
         </div>
         <p className={subCls + " mt-1"}>We’ll reply within one business day.</p>
-
-        {/* Intent switch */}
         <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
-          {INTENTS.map((i) => (
+          {(["buy","sell","general"] as const).map((i) => (
             <button
               key={i}
               type="button"
@@ -123,75 +116,79 @@ export default function ContactForm() {
         {/* Honeypot */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Contact — 12-col grid with a BIG gutter */}
-        <div className="grid grid-cols-12 gap-y-6 gap-x-8">
-          <Field className={col} label="Name *">
-            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} />
-          </Field>
-          <Field className={col} label="Company">
-            <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
-          </Field>
+        {/* Blocks grid — 2 columns on xl screens (so we use screen width) */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Contact block */}
+          <section className={cardCls}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-3">Contact</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
+              <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
+              <Field label="Email *"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
+              <Field label="Phone"><input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
+              <Field className="md:col-span-2" label="Country"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
+            </div>
+          </section>
 
-          <Field className={col} label="Email *">
-            <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
-          </Field>
-          <Field className={col} label="Phone">
-            <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
-          </Field>
+          {/* Trade block */}
+          <section className={cardCls}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-3">Trade</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              <Field label="Material">
+                <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
+                  <option>Wastepaper</option>
+                  <option>Plastics</option>
+                  <option>Metals</option>
+                </select>
+              </Field>
 
-          <Field className={full} label="Country">
-            <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." />
-          </Field>
-        </div>
+              <Field label="Grade">
+                <select
+                  className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
+                  value={grade}
+                  onChange={(e) => setGrade(e.target.value)}
+                  disabled={!isWastepaper}
+                >
+                  {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
+                </select>
+                {!isWastepaper && <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>}
+              </Field>
 
-        {/* Trade — same 12-col grid */}
-        <div className="grid grid-cols-12 gap-y-6 gap-x-8">
-          <Field className={col} label="Material">
-            <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
-              <option>Wastepaper</option>
-              <option>Plastics</option>
-              <option>Metals</option>
-            </select>
-          </Field>
+              <Field className="md:col-span-2" label="Quantity">
+                <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
+              </Field>
+            </div>
+          </section>
 
-          <Field className={col} label="Grade">
-            <select
-              className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-              disabled={!isWastepaper}
-            >
-              {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-            </select>
-            {!isWastepaper && <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>}
-          </Field>
+          {/* Logistics block */}
+          <section className={cardCls}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-3">Logistics</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+              <Field label="Incoterm">
+                <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
+                  {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
+                </select>
+              </Field>
+              <Field label="Port">
+                <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
+              </Field>
+            </div>
+          </section>
 
-          <Field className={col} label="Incoterm">
-            <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
-              {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
-            </select>
-          </Field>
-          <Field className={col} label="Port">
-            <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
-          </Field>
-
-          <Field className={full} label="Quantity">
-            <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
-          </Field>
-        </div>
-
-        {/* Message */}
-        <div className="grid grid-cols-12 gap-x-8">
-          <Field className={full} label="Message *">
-            <textarea
-              className={inputCls + " min-h-[110px] resize-y leading-6"}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Write a short description — specs, timings, constraints…"
-              required
-              minLength={10}
-            />
-          </Field>
+          {/* Message block — spans both columns on xl */}
+          <section className={`${cardCls} xl:col-span-2`}>
+            <h3 className="text-sm font-semibold text-slate-100 mb-3">Message</h3>
+            <Field label="Message *">
+              <textarea
+                className={inputCls + " min-h-[120px] resize-y leading-6"}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Write a short description — specs, timings, constraints…"
+                required
+                minLength={10}
+              />
+            </Field>
+          </section>
         </div>
 
         {/* Turnstile + actions */}
@@ -225,7 +222,7 @@ function Field({ label, children, className = "" }: { label: string; children: R
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={trans}
-      className={`grid gap-2 mb-3 ${className}`}
+      className={`grid gap-2 mb-2 ${className}`}
     >
       <span className="text-[11px] font-semibold text-slate-200">{label}</span>
       <div className="group/input relative">
