@@ -2,20 +2,29 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ToHiRe Trading Morocco — Recycling Trading (OCC/NCC)",
-  description:
-    "Connecting recycling worldwide: Wastepaper OCC/NCC focus, plastics & metals on request. WhatsApp +31 6 21 93 94 20.",
-  metadataBase: new URL("https://www.tohire-trading.example"), // TODO change domain
+  metadataBase: new URL("https://tohiretrading.com"),
+  title: {
+    default: "ToHiRe Trading Morocco — Recycling",
+    template: "%s | TToHiRe Trading Morocco",
+  },
+  description: "ToHiRe Trading Morocco — your site description goes here.",
   openGraph: {
     title: "ToHiRe Trading Morocco",
-    description: "Recyclables trading — OCC/NCC focus.",
-    url: "https://www.tohire-trading.example",
+    description: "ToHiRe Trading Morocco — your site description goes here.",
+    url: "/",
     siteName: "ToHiRe Trading Morocco",
-    images: ["/og.png"],
-    locale: "en",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "ToHiRe Trading Morocco",
+    description: "TToHiRe Trading Morocco — your site description goes here.",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = {
