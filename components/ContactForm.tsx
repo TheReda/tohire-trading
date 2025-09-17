@@ -73,69 +73,80 @@ export default function ContactForm() {
     }
   }
 
-  /* —— Denser inputs + bigger column gap —— */
+  /* —— Styling —— */
   const wrapCls   = "rounded-2xl border border-white/10 bg-white/7 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
   const titleCls  = "text-[20px] font-semibold tracking-tight text-slate-100";
   const subCls    = "text-[13px] text-slate-300";
   const labelCls  = "text-[11px] font-semibold text-slate-200";
-  // MUCH SHORTER inputs: py-1.5, smaller text; still nice focus
-  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200 ease-out";
+
+  // SHORT input height + crisp focus ring
+  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
   const inputCls  = inputBase + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
   const selectCls = inputCls + " bg-[--panel]";
   const hintCls   = "mt-1 text-[11px] text-slate-400";
-  // CLEARER space BETWEEN columns: 1.5rem (~24px) horizontally, a bit tighter vertically
-  const rowCls    = "grid md:grid-cols-2 gap-y-4 gap-x-8 md:gap-x-12";
 
   const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
+
+  // Grid helpers: true 12-column layout with a big gutter so columns NEVER touch
+  const col  = "col-span-12 md:col-span-6";
+  const full = "col-span-12";
 
   return (
     <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrapCls}>
       {/* Header */}
       <div className="px-6 pt-6">
-        <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.02}} className="inline-flex items-center gap-2">
+        <div className="inline-flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.08)]" />
           <div className={titleCls}>Tell us about your request</div>
-        </motion.div>
-        <motion.p initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.05}} className={subCls + " mt-1"}>
-          We’ll reply within one business day.
-        </motion.p>
+        </div>
+        <p className={subCls + " mt-1"}>We’ll reply within one business day.</p>
 
-        {/* Intent pill switch */}
-        <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.08}} className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
+        {/* Intent switch */}
+        <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {INTENTS.map((i) => (
             <button
               key={i}
               type="button"
               onClick={() => setIntent(i)}
-              className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all duration-200
-                ${intent === i
-                  ? "bg-[--brand] text-black shadow hover:shadow-[0_6px_18px_rgba(20,184,166,0.35)]"
-                  : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
-                }`}
+              className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all ${
+                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10"
+              }`}
               aria-pressed={intent === i}
             >
               {i === "buy" ? "Buy" : i === "sell" ? "Sell" : "General"}
             </button>
           ))}
-        </motion.div>
+        </div>
       </div>
 
-      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-5">
-        {/* Honeypot (hidden) */}
+      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-6">
+        {/* Honeypot */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Contact */}
-        <div className={rowCls}>
-          <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
-          <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
-          <Field label="Email *"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
-          <Field label="Phone"><input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
-          <Field label="Country" className="md:col-span-2"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
+        {/* Contact — 12-col grid with a BIG gutter */}
+        <div className="grid grid-cols-12 gap-y-6 gap-x-8">
+          <Field className={col} label="Name *">
+            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} />
+          </Field>
+          <Field className={col} label="Company">
+            <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
+          </Field>
+
+          <Field className={col} label="Email *">
+            <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
+          </Field>
+          <Field className={col} label="Phone">
+            <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
+          </Field>
+
+          <Field className={full} label="Country">
+            <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." />
+          </Field>
         </div>
 
-        {/* Trade */}
-        <div className={rowCls}>
-          <Field label="Material">
+        {/* Trade — same 12-col grid */}
+        <div className="grid grid-cols-12 gap-y-6 gap-x-8">
+          <Field className={col} label="Material">
             <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
               <option>Wastepaper</option>
               <option>Plastics</option>
@@ -143,38 +154,35 @@ export default function ContactForm() {
             </select>
           </Field>
 
-          <Field label="Grade">
+          <Field className={col} label="Grade">
             <select
               className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
               disabled={!isWastepaper}
             >
-              {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
+              {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
-            {!isWastepaper && (
-              <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>
-            )}
+            {!isWastepaper && <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>}
           </Field>
 
-          <Field label="Incoterm">
+          <Field className={col} label="Incoterm">
             <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
-              {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
+              {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
             </select>
           </Field>
-
-          <Field label="Port">
+          <Field className={col} label="Port">
             <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
           </Field>
 
-          <Field label="Quantity" className="md:col-span-2">
+          <Field className={full} label="Quantity">
             <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
           </Field>
         </div>
 
-        {/* Message (shorter) */}
-        <div>
-          <Field label="Message *">
+        {/* Message */}
+        <div className="grid grid-cols-12 gap-x-8">
+          <Field className={full} label="Message *">
             <textarea
               className={inputCls + " min-h-[110px] resize-y leading-6"}
               value={message}
@@ -184,11 +192,10 @@ export default function ContactForm() {
               minLength={10}
             />
           </Field>
-          <p className="mt-1 text-[11px] text-[--muted]">We’ll reply within 1 business day.</p>
         </div>
 
         {/* Turnstile + actions */}
-        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-3">
+        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-4">
           <div className="opacity-90">
             <Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} />
           </div>
@@ -218,7 +225,7 @@ function Field({ label, children, className = "" }: { label: string; children: R
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={trans}
-      className={`grid gap-2 mb-4 ${className}`}
+      className={`grid gap-2 mb-3 ${className}`}
     >
       <span className="text-[11px] font-semibold text-slate-200">{label}</span>
       <div className="group/input relative">
