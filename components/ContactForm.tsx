@@ -218,7 +218,7 @@ function Field({ label, children, className = "" }: { label: string; children: R
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={trans}
-      className={`grid gap-1.5 mb-3 ${className}`}
+      className={`grid gap-2 mb-4 ${className}`}
     >
       <span className="text-[11px] font-semibold text-slate-200">{label}</span>
       <div className="group/input relative">
