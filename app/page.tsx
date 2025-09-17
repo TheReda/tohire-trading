@@ -529,3 +529,23 @@ function Logo({ className = "h-8 w-8" }) {
     </svg>
   );
 }
+
+/* ---------- Stats ---------- */
+function Stats() {
+  const stats = [
+    { label: "Tons per year",  value: ">100,000" },
+    { label: "Regions served", value: "EMEA • Far East • Asia" },
+    { label: "Docs on-time",   value: "100%" },
+    { label: "Logistics",      value: "End-to-end handled" },
+  ];
+  return (
+    <div className="grid sm:grid-cols-2 gap-4">
+      {stats.map((s, i) => (
+        <div key={i} className="rounded-xl border border-white/10 p-5 bg-[--panel]">
+          <div className="text-2xl font-extrabold text-teal-300">{s.value}</div>
+          <div className="text-sm text-slate-300">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
