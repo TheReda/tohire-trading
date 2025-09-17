@@ -83,28 +83,29 @@ export default function ContactForm() {
   const selectCls = inputCls + " bg-[--panel]";
   const hintCls   = "mt-1 text-[12px] text-slate-400";
 
-  const fadeUp = { initial: {opacity:0, y:6}, animate: {opacity:1, y:0}, transition: {duration:0.28, ease:"easeOut"} };
+  // Framer Motion transition (typed cubic-bezier)
+  const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
-    <motion.div {...fadeUp} className={wrapCls}>
+    <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrapCls}>
       {/* Header */}
       <div className="px-6 pt-6">
-        <motion.div {...fadeUp} transition={{...fadeUp.transition, delay:0.02}} className="inline-flex items-center gap-2">
+        <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.02}} className="inline-flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.08)]" />
           <div className={titleCls}>Tell us about your request</div>
         </motion.div>
-        <motion.p {...fadeUp} transition={{...fadeUp.transition, delay:0.05}} className={subCls + " mt-1"}>
+        <motion.p initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.05}} className={subCls + " mt-1"}>
           We’ll reply within one business day.
         </motion.p>
 
         {/* Intent pill switch */}
-        <motion.div {...fadeUp} transition={{...fadeUp.transition, delay:0.08}} className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
+        <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={{...trans, delay:0.08}} className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {INTENTS.map((i) => (
             <button
               key={i}
               type="button"
               onClick={() => setIntent(i)}
-              className={`px-3.5 py-1.5 text-[13px] font-semibold rounded-full transition-all duration-200 ease-out
+              className={`px-3.5 py-1.5 text-[13px] font-semibold rounded-full transition-all duration-200
                 ${intent === i
                   ? "bg-[--brand] text-black shadow hover:shadow-[0_6px_18px_rgba(20,184,166,0.35)]"
                   : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
@@ -209,11 +210,14 @@ export default function ContactForm() {
 }
 
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
+  // Same transition everywhere, typed easing
+  const trans = { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
+
   return (
     <motion.label
       initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
+      transition={trans}
       className={`grid gap-1 ${className}`}
     >
       <span className="text-[12px] font-semibold text-slate-200">{label}</span>
