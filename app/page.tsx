@@ -499,7 +499,7 @@ function GradeCard({ g, lang }: { g: Grade; lang: LangKey }) {
           priority={g.code === "1.05"}
         />
       </div>
-      <div className="mt-3 font-semibold">{g.code} — {g.title}</div>
+      <div className="mt-3 font-semibold"><a href={gradeHref(g.code, lang)} className="hover:underline">{g.code} — {g.title}</a></div>
       <p className="mt-1 text-sm text-[--muted]">{g.desc[lang]}</p>
 
       <div className="mt-3 rounded-lg border border-white/10 p-3 bg-[--panel]">
