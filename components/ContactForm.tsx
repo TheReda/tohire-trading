@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { motion } from "framer-motion";
 
 const INCOTERMS = ["FOB","CFR","CIF","EXW","DAP"] as const;
 const INTENTS   = ["buy","sell","general"] as const;
@@ -72,87 +73,74 @@ export default function ContactForm() {
     }
   }
 
-  /* ——— Airbnb-ish styles ——— */
-  // softer surfaces, subtle borders, roomy line-height, clear hierarchy
-  const wrapCls   = "rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.25)]";
-  const titleCls  = "text-xl font-semibold tracking-tight text-slate-100";
-  const subCls    = "text-sm text-slate-300";
-  const labelCls  = "text-[13px] font-semibold text-slate-200";
-  const inputCls  = "mt-1.5 w-full rounded-xl border border-white/15 bg-white/7 backdrop-blur px-4 py-3 text-[15px] text-slate-100 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-[--brand]/50 focus:border-[--brand]/40";
+  /* —— Airbnb-ish, micro-anim, tighter spacing —— */
+  const wrapCls   = "rounded-2xl border border-white/10 bg-white/7 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
+  const titleCls  = "text-[20px] font-semibold tracking-tight text-slate-100";
+  const subCls    = "text-[13px] text-slate-300";
+  const labelCls  = "text-[12px] font-semibold text-slate-200";
+  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[15px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200 ease-out";
+  const inputCls  = inputBase + " px-4 py-3 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
   const selectCls = inputCls + " bg-[--panel]";
   const hintCls   = "mt-1 text-[12px] text-slate-400";
 
+  const fadeUp = { initial: {opacity:0, y:6}, animate: {opacity:1, y:0}, transition: {duration:0.28, ease:"easeOut"} };
+
   return (
-    <div className={wrapCls}>
+    <motion.div {...fadeUp} className={wrapCls}>
       {/* Header */}
       <div className="px-6 pt-6">
-        <div className="inline-flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[--brand]" />
+        <motion.div {...fadeUp} transition={{...fadeUp.transition, delay:0.02}} className="inline-flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.08)]" />
           <div className={titleCls}>Tell us about your request</div>
-        </div>
-        <p className={subCls + " mt-1"}>We’ll reply within one business day.</p>
+        </motion.div>
+        <motion.p {...fadeUp} transition={{...fadeUp.transition, delay:0.05}} className={subCls + " mt-1"}>
+          We’ll reply within one business day.
+        </motion.p>
 
         {/* Intent pill switch */}
-        <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
+        <motion.div {...fadeUp} transition={{...fadeUp.transition, delay:0.08}} className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {INTENTS.map((i) => (
             <button
               key={i}
               type="button"
               onClick={() => setIntent(i)}
-              className={`px-3.5 py-1.5 text-sm font-semibold rounded-full transition ${
-                intent === i
-                  ? "bg-[--brand] text-black shadow"
-                  : "text-slate-300 hover:bg-white/10"
-              }`}
+              className={`px-3.5 py-1.5 text-[13px] font-semibold rounded-full transition-all duration-200 ease-out
+                ${intent === i
+                  ? "bg-[--brand] text-black shadow hover:shadow-[0_6px_18px_rgba(20,184,166,0.35)]"
+                  : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
+                }`}
               aria-pressed={intent === i}
             >
               {i === "buy" ? "Buy" : i === "sell" ? "Sell" : "General"}
             </button>
           ))}
-        </div>
+        </motion.div>
       </div>
 
-      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-6">
+      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-5">
         {/* Honeypot (hidden) */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Contact */}
-        <div className="grid md:grid-cols-2 gap-5">
-          <div>
-            <label className={labelCls}>Name *</label>
-            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} />
-          </div>
-          <div>
-            <label className={labelCls}>Company</label>
-            <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
-          </div>
-          <div>
-            <label className={labelCls}>Email *</label>
-            <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required />
-          </div>
-          <div>
-            <label className={labelCls}>Phone</label>
-            <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
-          </div>
-          <div className="md:col-span-2">
-            <label className={labelCls}>Country</label>
-            <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." />
-          </div>
+        {/* Contact — 2% horizontal gap, tight vertical gap */}
+        <div className="grid md:grid-cols-2 gap-y-2 gap-x-[2%]">
+          <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
+          <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
+          <Field label="Email *"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
+          <Field label="Phone"><input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
+          <Field label="Country" className="md:col-span-2"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
         </div>
 
-        {/* Trade */}
-        <div className="grid md:grid-cols-2 gap-5">
-          <div>
-            <label className={labelCls}>Material</label>
+        {/* Trade — 2% horizontal gap, tight vertical gap */}
+        <div className="grid md:grid-cols-2 gap-y-2 gap-x-[2%]">
+          <Field label="Material">
             <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
               <option>Wastepaper</option>
               <option>Plastics</option>
               <option>Metals</option>
             </select>
-          </div>
+          </Field>
 
-          <div>
-            <label className={labelCls}>Grade</label>
+          <Field label="Grade">
             <select
               className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
               value={grade}
@@ -164,57 +152,76 @@ export default function ContactForm() {
             {!isWastepaper && (
               <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>
             )}
-          </div>
+          </Field>
 
-          <div>
-            <label className={labelCls}>Incoterm</label>
+          <Field label="Incoterm">
             <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
               {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
             </select>
-          </div>
+          </Field>
 
-          <div>
-            <label className={labelCls}>Port</label>
+          <Field label="Port">
             <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
-          </div>
+          </Field>
 
-          <div className="md:col-span-2">
-            <label className={labelCls}>Quantity</label>
+          <Field label="Quantity" className="md:col-span-2">
             <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
-          </div>
+          </Field>
         </div>
 
         {/* Message */}
         <div>
-          <label className={labelCls}>Message *</label>
-          <textarea
-            className={inputCls + " min-h-[160px] resize-y leading-6"}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write a short description — specs, timings, constraints…"
-            required
-            minLength={10}
-          />
+          <Field label="Message *">
+            <textarea
+              className={inputCls + " min-h-[150px] resize-y leading-6"}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Write a short description — specs, timings, constraints…"
+              required
+              minLength={10}
+            />
+          </Field>
+          <p className="mt-1 text-[12px] text-[--muted]">We’ll reply within 1 business day.</p>
         </div>
 
         {/* Turnstile + actions */}
-        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-4">
+        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-3">
           <div className="opacity-90">
             <Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} />
           </div>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.985 }}
             type="submit"
             disabled={loading || !token}
-            className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60"
+            className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60 shadow-[0_8px_24px_rgba(20,184,166,0.25)]"
           >
             {loading ? "Sending…" : "Send message"}
-          </button>
+          </motion.button>
         </div>
 
         {/* Status */}
         {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
         {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
       </form>
-    </div>
+    </motion.div>
+  );
+}
+
+function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
+  return (
+    <motion.label
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+      className={`grid gap-1 ${className}`}
+    >
+      <span className="text-[12px] font-semibold text-slate-200">{label}</span>
+      <div className="group/input relative">
+        {children}
+        {/* soft focus glow */}
+        <span className="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within/input:ring-2 group-focus-within/input:ring-[--brand]/40 transition-all duration-200" />
+      </div>
+    </motion.label>
   );
 }
