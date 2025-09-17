@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "New Corrugated Cuttings (NCC 4.01) Morocco | ToHiRe Trading",
   description: "New shavings of corrugated board (post-industrial). Clean stream, stable quality, EN643 4.01.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/shavings-ncc",
+    languages: {
+      "en": "https://tohiretrading.com/en/shavings-ncc",
+      "fr": "https://tohiretrading.com/en/shavings-ncc"
+    }
+  },
+  openGraph: {
+    title: "New Corrugated Cuttings (NCC 4.01) Morocco | ToHiRe Trading",
+    description: "New shavings of corrugated board (post-industrial). Clean stream, stable quality, EN643 4.01.",
+    url: "https://tohiretrading.com/en/shavings-ncc",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (

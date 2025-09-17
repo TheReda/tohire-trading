@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "Sorted Office Paper (2.05) Morocco | ToHiRe Trading",
   description: "SOP 2.05 supply with consistent quality. Predominantly wood-free office paper, export-ready.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/sop-office-paper",
+    languages: {
+      "en": "https://tohiretrading.com/en/sop-office-paper",
+      "fr": "https://tohiretrading.com/en/sop-office-paper"
+    }
+  },
+  openGraph: {
+    title: "Sorted Office Paper (2.05) Morocco | ToHiRe Trading",
+    description: "SOP 2.05 supply with consistent quality. Predominantly wood-free office paper, export-ready.",
+    url: "https://tohiretrading.com/en/sop-office-paper",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (

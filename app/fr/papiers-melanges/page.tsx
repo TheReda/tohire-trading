@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "Papiers et Cartons Mélangés 1.02 — Maroc | ToHiRe Trading",
   description: "Mélange trié avec retrait des prohibés. Spécifications contractuelles, logistique export gérée.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/mixed-paper",
+    languages: {
+      "en": "https://tohiretrading.com/en/mixed-paper",
+      "fr": "https://tohiretrading.com/fr/papiers-melanges"
+    }
+  },
+  openGraph: {
+    title: "Papiers et Cartons Mélangés 1.02 — Maroc | ToHiRe Trading",
+    description: "Mélange trié avec retrait des prohibés. Spécifications contractuelles, logistique export gérée.",
+    url: "https://tohiretrading.com/en/mixed-paper",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (

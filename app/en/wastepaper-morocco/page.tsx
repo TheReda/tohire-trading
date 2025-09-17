@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "Wastepaper Trading in Morocco: OCC, NCC, SOP | ToHiRe Trading",
   description: "Morocco-focused wastepaper sourcing and export. OCC, NCC, mixed paper, SOP. EN643 specs, ports Casablanca and Tanger-Med.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/wastepaper-morocco",
+    languages: {
+      "en": "https://tohiretrading.com/en/wastepaper-morocco",
+      "fr": "https://tohiretrading.com/en/wastepaper-morocco"
+    }
+  },
+  openGraph: {
+    title: "Wastepaper Trading in Morocco: OCC, NCC, SOP | ToHiRe Trading",
+    description: "Morocco-focused wastepaper sourcing and export. OCC, NCC, mixed paper, SOP. EN643 specs, ports Casablanca and Tanger-Med.",
+    url: "https://tohiretrading.com/en/wastepaper-morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (

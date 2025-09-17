@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "OCC 1.05 Wastepaper Supplier Morocco | ToHiRe Trading",
   description: "Buy and sell OCC 1.05 (old corrugated containers) in Morocco. EN643-aligned specs, export-ready bales, end-to-end logistics.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/occ",
+    languages: {
+      "en": "https://tohiretrading.com/en/occ",
+      "fr": "https://tohiretrading.com/fr/occ-carton-maroc"
+    }
+  },
+  openGraph: {
+    title: "OCC 1.05 Wastepaper Supplier Morocco | ToHiRe Trading",
+    description: "Buy and sell OCC 1.05 (old corrugated containers) in Morocco. EN643-aligned specs, export-ready bales, end-to-end logistics.",
+    url: "https://tohiretrading.com/en/occ",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (

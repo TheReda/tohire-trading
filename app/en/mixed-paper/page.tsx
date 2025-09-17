@@ -2,6 +2,20 @@ import Link from "next/link";
 export const metadata = {
   title: "Mixed Papers and Boards (1.02) Morocco | ToHiRe Trading",
   description: "Sorted mixed papers and boards with prohibitives removed. Contract-based specs, export logistics handled.",
+  alternates: {
+    canonical: "https://tohiretrading.com/en/mixed-paper",
+    languages: {
+      "en": "https://tohiretrading.com/en/mixed-paper",
+      "fr": "https://tohiretrading.com/fr/papiers-melanges"
+    }
+  },
+  openGraph: {
+    title: "Mixed Papers and Boards (1.02) Morocco | ToHiRe Trading",
+    description: "Sorted mixed papers and boards with prohibitives removed. Contract-based specs, export logistics handled.",
+    url: "https://tohiretrading.com/en/mixed-paper",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  }
 };
 export default function Page() {
   return (
