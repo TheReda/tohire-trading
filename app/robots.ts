@@ -1,8 +1,7 @@
-import type { MetadataRoute } from "next";
-
-export default function robots(): MetadataRoute.Robots {
+export default function robots() {
   return {
-    rules: [{ userAgent: "*", allow: "/" }],
+    rules: { userAgent: "*", allow: "/" },
     sitemap: "https://tohiretrading.com/sitemap.xml",
+    host: "https://tohiretrading.com",
   };
 }

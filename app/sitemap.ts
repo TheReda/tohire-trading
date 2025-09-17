@@ -1,14 +1,15 @@
-import type { MetadataRoute } from "next";
-
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: "https://tohiretrading.com/",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    // Add more pages here as you create them:
-    // { url: "https://tohiretrading.com/about", lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+export default function sitemap() {
+  const base = "https://tohiretrading.com";
+  const routes = [
+    "/",
+    "/en/occ",
+    "/en/shavings-ncc",
+    "/en/mixed-paper",
+    "/en/sop-office-paper",
+    "/en/wastepaper-morocco",
+    "/fr/occ-carton-maroc",
+    "/fr/papiers-melanges",
   ];
+  const now = new Date().toISOString();
+  return routes.map((p) => ({ url: base + p, lastModified: now, changefreq: p === "/" ? "weekly" : "monthly", priority: p === "/" ? 1 : 0.8 }));
 }
