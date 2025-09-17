@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, Children } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { motion } from "framer-motion";
 
@@ -40,7 +40,7 @@ export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [ok, setOk]           = useState<null | boolean>(null);
   const [err, setErr]         = useState<string | null>(null);
-  const [honey, setHoney]     = useState(""); // honeypot
+  const [honey, setHoney]     = useState("");
 
   const isWastepaper = useMemo(() => material === "Wastepaper", [material]);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
@@ -48,7 +48,6 @@ export default function ContactForm() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true); setOk(null); setErr(null);
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -62,7 +61,6 @@ export default function ContactForm() {
       if (!res.ok || !data?.ok) throw new Error(data?.error || "Failed to send");
 
       setOk(true);
-      // reset
       setIntent("general");
       setName(""); setCompany(""); setEmail(""); setPhone(""); setCountry("");
       setMaterial("Wastepaper"); setGrade(GRADES[0]); setQty("");
@@ -74,12 +72,11 @@ export default function ContactForm() {
     }
   }
 
-  /* —— Aesthetic system —— */
+  // ——— Aesthetics ———
   const wrap   = "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
   const h1     = "text-[20px] font-semibold tracking-tight text-slate-100";
   const sub    = "text-[13px] text-slate-300";
   const card   = "rounded-xl border border-white/10 bg-[--panel] p-6";
-  const label  = "text-[11px] font-semibold text-slate-200";
   const base   = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
   const input  = base + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
   const select = input + " bg-[--panel]";
@@ -96,7 +93,6 @@ export default function ContactForm() {
         </div>
         <p className={sub + " mt-1"}>We’ll reply within one business day.</p>
 
-        {/* Intent pills */}
         <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {(["buy","sell","general"] as const).map((i) => (
             <button
@@ -104,7 +100,7 @@ export default function ContactForm() {
               type="button"
               onClick={() => setIntent(i)}
               className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all ${
-                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
+                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10"
               }`}
               aria-pressed={intent === i}
             >
@@ -118,7 +114,7 @@ export default function ContactForm() {
         {/* Honeypot */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* ——— Blocks in two columns on xl ——— */}
+        {/* Blocks – two columns on md+ to cut scrolling */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contact */}
           <SectionCard title="Contact">
@@ -184,7 +180,7 @@ export default function ContactForm() {
             </TwoCol>
           </SectionCard>
 
-          {/* Message — spans both columns */}
+          {/* Message – spans both columns */}
           <SectionCard title="Message" spanBoth>
             <Field label="Message *">
               <textarea
@@ -215,7 +211,6 @@ export default function ContactForm() {
           </motion.button>
         </div>
 
-        {/* Status */}
         {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
         {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
       </form>
@@ -225,33 +220,35 @@ export default function ContactForm() {
 
 /* ——— Layout helpers ——— */
 
-// Section card with optional 2-col span on xl
+// Section card container
 function SectionCard({ title, spanBoth = false, children }: { title: string; spanBoth?: boolean; children: React.ReactNode }) {
   return (
-    <section className={`rounded-xl border border-white/10 bg-[--panel] p-6 ${spanBoth ? "xl:col-span-2" : ""}`}>
+    <section className={`rounded-xl border border-white/10 bg-[--panel] p-6 ${spanBoth ? "md:col-span-2" : ""}`}>
       <h3 className="text-sm font-semibold text-slate-100 mb-4">{title}</h3>
       {children}
     </section>
   );
 }
 
-// True two-column layout with a visible vertical divider + real gutters
+/** TwoCol:
+ * Ensures a FIXED spacer between left/right columns on md+:
+ * grid-cols-[1fr_2.25rem_1fr] ⇒ about 36px of whitespace in the middle.
+ */
 function TwoCol({ children }: { children: React.ReactNode }) {
+  const [left, right] = Children.toArray(children);
   return (
-    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-12">
-      {/* vertical divider only on md+ */}
-      <div className="hidden md:block absolute inset-y-0 left-1/2 w-px bg-white/10 pointer-events-none" />
-      {children}
+    <div className="grid grid-cols-1 md:grid-cols-[1fr_2.25rem_1fr] gap-y-5 items-start">
+      <div className="md:pr-2">{left}</div>
+      <div className="hidden md:block" />
+      <div className="md:pl-2">{right}</div>
     </div>
   );
 }
 
-// Column wrapper adds inner spacing and side padding to create a gutter
 function Col({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-5 md:px-6">{children}</div>;
+  return <div className="space-y-4">{children}</div>;
 }
 
-// Field wrapper with subtle focus glow
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="grid gap-2">
