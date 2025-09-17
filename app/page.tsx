@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import ContactForm from "../components/ContactForm";
 
 const PrivacyDraft = (_props: any) => null;
 
@@ -408,7 +409,7 @@ export default function Home() {
           </div>
 
           <div className="rounded-2xl border border-white/10 p-6 bg-[--bg] shadow-sm">
-            <ContactForm t={t} />
+            <ContactForm />
           </div>
         </div>
       </section>
@@ -595,44 +596,6 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   );
 }
 
-function ContactForm({ t }: { t: typeof en }) {
-  const [form, setForm] = useState({ name: "", email: "", message: "", company: "" });
-  const [sent, setSent] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true); setErr(null);
-    const res = await fetch("/api/mail", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ kind: "contact", form: { ...form, material: "Contact", grade: "N/A" } }),
-    });
-    const j = await res.json();
-    setLoading(false);
-    if (res.ok && j.ok) setSent(true);
-    else setErr(j.error || "Failed to send. Try again.");
-  }
-
-  return (
-    <form onSubmit={submit} className="grid gap-4">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label={t.form.name}><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 outline-none focus:ring-2 focus:ring-teal-500/30" /></Field>
-        <Field label={t.form.company}><input value={form.company} onChange={(e) => setForm({ ...form, company: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 outline-none focus:ring-2 focus:ring-teal-500/30" /></Field>
-      </div>
-      <Field label={t.form.email}><input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 outline-none focus:ring-2 focus:ring-teal-500/30" /></Field>
-      <Field label={t.form.message}><textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 outline-none focus:ring-2 focus:ring-teal-500/30" /></Field>
-      <div className="flex flex-wrap items-center gap-3">
-        <button disabled={loading} type="submit" className="rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold disabled:opacity-60">{loading ? "Sending…" : t.form.send}</button>
-        {sent && <div className="text-sm text-teal-300">{t.form.sent}</div>}
-        {err && <div className="text-sm text-red-400">{err}</div>}
-      </div>
-      <p className="text-xs text-[--muted]">{t.form.privacy}</p>
-    </form>
-  );
-}
-
 function Stats() {
   const stats = [
     { label: "Tons per year",  value: ">100,000" },
@@ -663,87 +626,13 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function TradeForm({ kind, t, onDone }: { kind: "buy" | "sell"; t: typeof en; onDone: () => void }) {
-  const [f, setF] = useState({
-    name: "", company: "", email: "", phone: "", country: "",
-    material: "Wastepaper", grade: "1.05 — Old corrugated containers (OCC)",
-    qty: "", incoterm: "FOB", port: "", message: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [ok, setOk] = useState(false);
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true); setErr(null);
-    const res = await fetch("/api/mail", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ kind, form: f }),
-    });
-    const j = await res.json();
-    setLoading(false);
-    if (res.ok && j.ok) { setOk(true); onDone(); }
-    else setErr(j.error || "Failed to send. Try again.");
-  }
-
   return (
-    <form onSubmit={submit} className="grid gap-4">
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label={t.form.name}><input required value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 focus:ring-2 focus:ring-teal-500/30" /></Field>
-        <Field label={t.form.company}><input value={f.company} onChange={(e) => setF({ ...f, company: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 focus:ring-2 focus:ring-teal-500/30" /></Field>
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label={t.form.email}><input required type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 focus:ring-2 focus:ring-teal-500/30" /></Field>
-        <Field label={t.form.phone}><input value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 focus:ring-2 focus:ring-teal-500/30" /></Field>
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label={t.form.country}><input value={f.country} onChange={(e) => setF({ ...f, country: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2 focus:ring-2 focus:ring-teal-500/30" /></Field>
-        <Field label={t.form.incoterm}>
-          <select value={f.incoterm} onChange={(e) => setF({ ...f, incoterm: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[--panel] px-3 py-2">
-            {["FOB","CFR","CIF","EXW","DAP"].map((x) => <option key={x}>{x}</option>)}
-          </select>
-        </Field>
-      </div>
-
-      <div className="grid sm:grid-cols-3 gap-4">
-        <Field label={t.form.material}>
-          <select
-            value={f.material}
-            onChange={(e) => setF({ ...f, material: e.target.value })}
-            className="w-full rounded-lg border border-white/10 bg-[--panel] px-3 py-2"
-          >
-            <option>Wastepaper</option>
-          </select>
-        </Field>
-        <Field label={t.form.grade}>
-          <select value={f.grade} onChange={(e) => setF({ ...f, grade: e.target.value })} className="w-full rounded-lg border border-white/10 bg-[--panel] px-3 py-2">
-            {[
-              "1.05 — Old corrugated containers (OCC)",
-              "4.01 — New shavings of corrugated board",
-              "1.02 — Mixed papers and boards (sorted)",
-              "2.05 — Sorted office paper",
-            ].map((x) => <option key={x}>{x}</option>)}
-          </select>
-        </Field>
-        <Field label={t.form.qty}><input value={f.qty} onChange={(e) => setF({ ...f, qty: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2" placeholder="e.g., 10 x 40' HQ" /></Field>
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4">
-        <Field label={t.form.port}><input value={f.port} onChange={(e) => setF({ ...f, port: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2" placeholder={t.form.portPH} /></Field>
-        <Field label={t.form.message}><input value={f.message} onChange={(e) => setF({ ...f, message: e.target.value })} className="w-full rounded-lg border border-white/10 bg-transparent px-3 py-2" placeholder={t.form.anyReq} /></Field>
-      </div>
-
-      <div className="flex flex-wrap items-center gap-3">
-        <button disabled={loading} className="rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold disabled:opacity-60" type="submit">
-          {loading ? "Sending…" : t.form.send}
-        </button>
-        {err && <span className="text-sm text-red-400">{err}</span>}
-        {ok && <span className="text-sm text-teal-300">{t.form.sent}</span>}
-        <span className="text-xs text-[--muted]">{t.form.privacy}</span>
-      </div>
-    </form>
+    <div>
+      <p className="text-sm text-[--muted] mb-4">
+        This message will be sent to our team. Mention whether you want to {kind === "buy" ? "buy" : "sell"}.
+      </p>
+      <ContactForm />
+    </div>
   );
 }
 
