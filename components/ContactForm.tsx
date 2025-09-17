@@ -3,6 +3,7 @@
 import React, { useMemo, useState, Children } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { motion } from "framer-motion";
+const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
 const INCOTERMS = ["FOB","CFR","CIF","EXW","DAP"] as const;
 const INTENTS   = ["buy","sell","general"] as const;
