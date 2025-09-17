@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 const INCOTERMS = ["FOB","CFR","CIF","EXW","DAP"] as const;
@@ -33,6 +33,7 @@ export default function ContactForm() {
   const [honey, setHoney] = useState(""); // honeypot
 
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
+  const isWastepaper = useMemo(() => material === "Wastepaper", [material]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,9 +68,13 @@ export default function ContactForm() {
     }
   }
 
+  const inputCls = "mt-1 w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-base outline-none focus:ring-2 focus:ring-teal-500/40";
+  const selectCls = inputCls + " bg-[--panel]";
+  const labelCls = "block text-sm font-medium";
+
   return (
-    <form onSubmit={onSubmit} className="mt-6 grid gap-4">
-      {/* Honeypot field (hidden) */}
+    <form onSubmit={onSubmit} className="mt-4 grid gap-5">
+      {/* Honeypot (hidden) */}
       <input
         type="text"
         name="website"
@@ -80,101 +85,112 @@ export default function ContactForm() {
         autoComplete="off"
       />
 
-      <div className="grid sm:grid-cols-3 gap-4">
+      {/* Row 1 */}
+      <div className="grid md:grid-cols-3 gap-5">
         <div>
-          <label className="block text-sm font-medium">Intent</label>
-          <select className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={intent} onChange={(e) => setIntent(e.target.value as any)}>
+          <label className={labelCls}>Intent</label>
+          <select className={selectCls} value={intent} onChange={(e) => setIntent(e.target.value as (typeof INTENTS)[number])}>
             {INTENTS.map(i => <option key={i} value={i}>{i.toUpperCase()}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium">Name</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={name} onChange={(e) => setName(e.target.value)} required minLength={2} />
+          <label className={labelCls}>Name</label>
+          <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} required minLength={2} />
         </div>
         <div>
-          <label className="block text-sm font-medium">Company</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={company} onChange={(e) => setCompany(e.target.value)} />
+          <label className={labelCls}>Company</label>
+          <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} />
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4">
+      {/* Row 2 */}
+      <div className="grid md:grid-cols-3 gap-5">
         <div>
-          <label className="block text-sm font-medium">Email</label>
-          <input type="email" className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <label className={labelCls}>Email</label>
+          <input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} required />
         </div>
         <div>
-          <label className="block text-sm font-medium">Phone</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
+          <label className={labelCls}>Phone</label>
+          <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." />
         </div>
         <div>
-          <label className="block text-sm font-medium">Country</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={country} onChange={(e) => setCountry(e.target.value)} />
+          <label className={labelCls}>Country</label>
+          <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} />
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4">
+      {/* Row 3 */}
+      <div className="grid md:grid-cols-3 gap-5">
         <div>
-          <label className="block text-sm font-medium">Material</label>
-          <select className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={material} onChange={(e) => setMaterial(e.target.value)}>
+          <label className={labelCls}>Material</label>
+          <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
             <option>Wastepaper</option>
             <option>Plastics</option>
             <option>Metals</option>
           </select>
         </div>
+
         <div>
-          <label className="block text-sm font-medium">Grade</label>
-          <select className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={grade} onChange={(e) => setGrade(e.target.value)}>
-            {GRADES.map(g => <option key={g}>{g}</option>)}
+          <label className={labelCls}>Grade</label>
+          <select
+            className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
+            disabled={!isWastepaper}
+          >
+            {GRADES.map(g => <option key={g} value={g}>{g}</option>)}
           </select>
+          {!isWastepaper && (
+            <p className="mt-1 text-xs text-slate-400">
+              For plastics/metals, please mention the exact grade in your message.
+            </p>
+          )}
         </div>
+
         <div>
-          <label className="block text-sm font-medium">Quantity</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
+          <label className={labelCls}>Quantity</label>
+          <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
         </div>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4">
+      {/* Row 4 */}
+      <div className="grid md:grid-cols-3 gap-5">
         <div>
-          <label className="block text-sm font-medium">Incoterm</label>
-          <select className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
+          <label className={labelCls}>Incoterm</label>
+          <select
+            className={selectCls}
+            value={incoterm}
+            onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}
+          >
             {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium">Port</label>
-          <input className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
+          <label className={labelCls}>Port</label>
+          <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
         </div>
-        <div className="hidden sm:block" />
+        <div className="hidden md:block" />
       </div>
 
+      {/* Message */}
       <div>
-        <label className="block text-sm font-medium">Message</label>
-        <textarea className="mt-1 w-full rounded-lg border px-3 py-2 min-h-[140px]"
-          value={message} onChange={(e) => setMessage(e.target.value)} required minLength={10} />
+        <label className={labelCls}>Message</label>
+        <textarea className={inputCls + " min-h-[160px]"} value={message} onChange={(e) => setMessage(e.target.value)} required minLength={10} />
       </div>
 
-      <div className="mt-2">
+      {/* Turnstile */}
+      <div className="mt-1">
         <Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} />
       </div>
 
-      <button type="submit" disabled={loading || !token}
-        className="mt-2 inline-flex items-center gap-2 rounded-lg px-4 py-2 border">
-        {loading ? "Sending..." : "Send"}
-      </button>
-
-      {ok && <p className="text-green-700">Thanks! Your message was sent.</p>}
-      {ok === false && <p className="text-red-700">Error: {err ?? "please try again"}</p>}
+      {/* Actions */}
+      <div className="flex items-center gap-3">
+        <button type="submit" disabled={loading || !token} className="inline-flex items-center gap-2 rounded-xl px-5 py-3 border border-white/15 font-semibold">
+          {loading ? "Sending..." : "Send"}
+        </button>
+        {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
+        {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
+      </div>
     </form>
   );
 }
