@@ -5,156 +5,101 @@ import { z } from "zod";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const BodySchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email().max(200),
-  message: z.string().min(10).max(5000),
-
-  // NEW “mini-CRM” fields (all optional)
-  intent: z.enum(["buy","sell","general"]).optional().default("general"),
-  company: z.string().max(200).optional().default(""),
-  phone: z.string().max(100).optional().default(""),
-  country: z.string().max(120).optional().default(""),
-  material: z.string().max(120).optional().default(""),
-  grade: z.string().max(240).optional().default(""),
-  qty: z.string().max(120).optional().default(""),
-  incoterm: z.string().max(20).optional().default(""),
-  port: z.string().max(160).optional().default(""),
-
-  // Turnstile + honeypot
-  token: z.string().min(10),
-  honey: z.string().optional().default(""),
+const schema = z.object({
+  name: z.string().min(1),
+  company: z.string().optional().default(""),
+  email: z.string().email(),
+  phone: z.string().optional().default(""),
+  country: z.string().optional().default(""),
+  material: z.string().optional().default(""),
+  grade: z.string().optional().default(""),
+  qty: z.string().optional().default(""),
+  incoterm: z.string().optional().default(""),
+  port: z.string().optional().default(""),
+  message: z.string().min(1),
 });
 
-function escapeHtml(s: string) {
-  return s.replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]!));
+function htmlEscape(s: string) {
+  return s.replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]!));
+}
+
+function renderHtml(title: string, body: string) {
+  return `<!doctype html><html><head><meta charset="utf-8"/></head><body style="font-family:Inter,Arial,system-ui,sans-serif;background:#0b0f14;color:#e5eef9;padding:24px">
+  <div style="max-width:720px;margin:0 auto;background:#0f1520;border:1px solid rgba(255,255,255,.08);border-radius:16px">
+    <div style="padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.08);font-weight:600">${htmlEscape(title)}</div>
+    <div style="padding:20px;font-size:14px;line-height:1.6">${body}</div>
+  </div>
+</body></html>`;
 }
 
 export async function POST(req: Request) {
   try {
-    const {
-      SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, SMTP_TO,
-      TURNSTILE_SECRET_KEY,
-    } = process.env;
+    const data = schema.parse(await req.json());
 
-    if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !SMTP_FROM || !SMTP_TO) {
-      return NextResponse.json({ ok: false, error: "Email service not configured" }, { status: 503 });
-    }
-    if (!TURNSTILE_SECRET_KEY) {
-      return NextResponse.json({ ok: false, error: "Captcha not configured" }, { status: 503 });
-    }
-
-    const json = await req.json().catch(() => ({}));
-    const parsed = BodySchema.safeParse(json);
-    if (!parsed.success) {
-      return NextResponse.json({ ok: false, error: "Invalid input" }, { status: 400 });
-    }
-    const data = parsed.data;
-
-    // Honeypot
-    if (data.honey && data.honey.trim() !== "") {
-      return NextResponse.json({ ok: true });
-    }
-
-    // Turnstile verify
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-    const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body:
-        `secret=${encodeURIComponent(TURNSTILE_SECRET_KEY)}` +
-        `&response=${encodeURIComponent(data.token)}` +
-        (ip ? `&remoteip=${encodeURIComponent(ip)}` : ""),
-    });
-    const verifyJson: any = await verifyRes.json();
-    if (!verifyJson.success) {
-      return NextResponse.json({ ok: false, error: "Captcha failed" }, { status: 400 });
-    }
-
-    // SMTP
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: Number(SMTP_PORT || 587),
-      secure: false,
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
+    const tr = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      secure: String(process.env.SMTP_PORT) === "465",
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
     });
 
-    const subject =
-      (data.intent === "buy" ? "BUY request" : data.intent === "sell" ? "SELL offer" : "Contact") +
-      ` — ${data.name}`;
+    const toAddr = process.env.MAIL_TO || "contact@tohiretrading.com";
+    const fromAddr = process.env.MAIL_FROM || "ToHiRe TRADING MOROCCO <contact@tohiretrading.com>";
 
-    // Build HTML with the new fields
-    const fields: [string, string][] = [
-      ["Name", data.name],
-      ["Email", data.email],
-      ["Company", data.company || "-"],
-      ["Phone", data.phone || "-"],
-      ["Country", data.country || "-"],
-      ["Intent", data.intent],
-      ["Material", data.material || "-"],
-      ["Grade", data.grade || "-"],
-      ["Quantity", data.qty || "-"],
-      ["Incoterm", data.incoterm || "-"],
-      ["Port", data.port || "-"],
-    ];
+    const subject = `[Contact] ${data.name} • ${data.material || "General"}${data.qty ? " ("+data.qty+")" : ""}`;
 
-    const html =
-      `<h2>New website contact</h2>` +
-      `<table style="border-collapse:collapse">` +
-      fields.map(([k,v]) =>
-        `<tr><td style="padding:4px 8px;color:#64748b">${escapeHtml(k)}</td>` +
-        `<td style="padding:4px 8px"><strong>${escapeHtml(v)}</strong></td></tr>`
-      ).join("") +
-      `</table>` +
-      `<p style="margin-top:16px;white-space:pre-wrap">${escapeHtml(data.message)}</p>`;
+    const lines = [
+      `Name: ${data.name}`,
+      `Company: ${data.company}`,
+      `Email: ${data.email}`,
+      `Phone: ${data.phone}`,
+      `Country: ${data.country}`,
+      `Material: ${data.material}`,
+      `Grade: ${data.grade}`,
+      `Quantity: ${data.qty}`,
+      `Incoterm: ${data.incoterm}`,
+      `Port: ${data.port}`,
+      `Message: ${data.message}`,
+    ].join("\n");
 
-    const text =
-      `New website contact\n\n` +
-      fields.map(([k,v]) => `${k}: ${v}`).join("\n") +
-      `\n\nMessage:\n${data.message}`;
-
-    // Send to you
-    const info = await transporter.sendMail({
-      from: SMTP_FROM,
-      to: SMTP_TO,
-      subject,
-      text,
-      html,
+    await tr.sendMail({
+      from: fromAddr,
+      to: toAddr,
       replyTo: data.email,
+      subject,
+      text: lines,
+      html: renderHtml("New website contact", lines.replace(/\n/g, "<br/>")),
     });
 
-    // Auto-reply (best-effort; ignore failures)
-    try {
-      await transporter.sendMail({
-        from: SMTP_FROM,
-        to: data.email,
-        subject: "Thanks — we received your message (ToHiRe Trading Morocco)",
-        text:
-`Hi ${data.name},
+    const autoText = [
+      `Hello ${data.name},`,
+      ``,
+      `We received your message and will reply within one business day.`,
+      ``,
+      `Summary:`,
+      `Material: ${data.material}`,
+      `Grade: ${data.grade}`,
+      `Quantity: ${data.qty}`,
+      `Incoterm: ${data.incoterm}`,
+      `Port: ${data.port}`,
+      ``,
+      `Your message:`,
+      data.message,
+      ``,
+      `— ToHiRe Trading Morocco`,
+      `contact@tohiretrading.com`,
+    ].join("\n");
 
-Thanks for contacting ToHiRe Trading Morocco. We received your message and will get back to you shortly.
+    await tr.sendMail({
+      from: fromAddr,
+      to: data.email,
+      subject: "We received your message — ToHiRe Trading Morocco",
+      text: autoText,
+      html: renderHtml("We received your message", autoText.replace(/\n/g, "<br/>")),
+    });
 
-Copy of your message:
-${data.message}
-
-— ToHiRe Trading Morocco
-contact@tohiretrading.com
-https://tohiretrading.com`,
-        html:
-`<p>Hi ${escapeHtml(data.name)},</p>
-<p>Thanks for contacting <strong>ToHiRe Trading Morocco</strong>. We received your message and will get back to you shortly.</p>
-<p><em>Copy of your message:</em></p>
-<blockquote style="border-left:3px solid #e5e7eb;padding-left:12px;color:#334155">${escapeHtml(data.message).replace(/\n/g,"<br>")}</blockquote>
-<p>— ToHiRe Trading Morocco<br>
-<a href="mailto:contact@tohiretrading.com">contact@tohiretrading.com</a><br>
-<a href="https://tohiretrading.com">tohiretrading.com</a></p>`,
-        replyTo: SMTP_TO,
-      });
-    } catch {}
-
-    return NextResponse.json({ ok: true, id: (info as any)?.messageId ?? null });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ ok: false, error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  } catch (e: any) {
+    return NextResponse.json({ ok: false, error: e?.message || "Server error" }, { status: 400 });
   }
 }
