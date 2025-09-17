@@ -22,7 +22,7 @@ export default function ContactForm() {
   const [material, setMaterial] = useState("Wastepaper");
   const [grade, setGrade] = useState(GRADES[0]);
   const [qty, setQty] = useState("");
-  const [incoterm, setIncoterm] = useState(INCOTERMS[0]);
+  const [incoterm, setIncoterm] = useState<(typeof INCOTERMS)[number]>(INCOTERMS[0]);
   const [port, setPort] = useState("");
   const [message, setMessage] = useState("");
 
@@ -146,8 +146,8 @@ export default function ContactForm() {
         <div>
           <label className="block text-sm font-medium">Incoterm</label>
           <select className="mt-1 w-full rounded-lg border px-3 py-2"
-            value={incoterm} onChange={(e) => setIncoterm(e.target.value)}>
-            {INCOTERMS.map(i => <option key={i}>{i}</option>)}
+            value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
+            {INCOTERMS.map(i => <option key={i} value={i}>{i}</option>)}
           </select>
         </div>
         <div>
