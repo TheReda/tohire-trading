@@ -1,249 +1,234 @@
 "use client";
 
-import React, { useMemo, useState, Children } from "react";
-import { Turnstile } from "@marsidev/react-turnstile";
+import * as React from "react";
 import { motion } from "framer-motion";
-const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
-const INCOTERMS = ["FOB","CFR","CIF","EXW","DAP"] as const;
-const INTENTS   = ["buy","sell","general"] as const;
-const GRADES    = [
+/** ---------- Config ---------- */
+const MATERIALS = ["Wastepaper", "Plastics", "Metals"] as const;
+type Material = (typeof MATERIALS)[number];
+
+const INCOTERMS = ["FOB", "CFR", "CIF", "EXW", "DAP"] as const;
+type Incoterm = (typeof INCOTERMS)[number];
+
+const WASTE_GRADES = [
   "1.05 — Old corrugated containers (OCC)",
   "4.01 — New shavings of corrugated board",
   "1.02 — Mixed papers and boards (sorted)",
   "2.05 — Sorted office paper",
-];
+] as const;
 
+const trans = { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const };
+
+/** ---------- UI Primitives ---------- */
+function Card(props: React.PropsWithChildren<{ title: string; hint?: string }>) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={trans}
+      className="rounded-2xl border border-white/10 bg-[--panel] p-5 md:p-6 shadow-sm"
+    >
+      <div className="mb-4">
+        <div className="text-sm font-semibold text-slate-200">{props.title}</div>
+        {props.hint && <div className="text-xs text-[--muted] mt-1">{props.hint}</div>}
+      </div>
+      {props.children}
+    </motion.div>
+  );
+}
+
+function Row({ children }: { children: React.ReactNode }) {
+  // True two-column row with clear gutter and vertical rhythm
+  return <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">{children}</div>;
+}
+
+function Field({
+  label,
+  required,
+  children,
+  hint,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+  hint?: string;
+}) {
+  return (
+    <label className="block">
+      <div className="text-[13px] font-medium text-slate-200 mb-1.5">
+        {label} {required && <span className="text-teal-300">*</span>}
+      </div>
+      {children}
+      {hint && <div className="mt-1 text-xs text-[--muted]">{hint}</div>}
+    </label>
+  );
+}
+
+const inputCls =
+  "h-11 w-full rounded-xl border border-white/10 bg-white/[.03] px-3.5 text-[15px] outline-none transition " +
+  "placeholder:text-slate-500 focus:ring-2 focus:ring-teal-500/30 focus:border-white/20";
+
+/** ---------- Form ---------- */
 export default function ContactForm() {
-  const [intent, setIntent] = useState<(typeof INTENTS)[number]>("general");
+  const [material, setMaterial] = React.useState<Material>("Wastepaper");
+  const [grade, setGrade] = React.useState<string>(WASTE_GRADES[0]);
+  const [incoterm, setIncoterm] = React.useState<Incoterm>(INCOTERMS[0]);
 
-  // Contact
-  const [name, setName]       = useState("");
-  const [company, setCompany] = useState("");
-  const [email, setEmail]     = useState("");
-  const [phone, setPhone]     = useState("");
-  const [country, setCountry] = useState("");
+  const [name, setName] = React.useState("");
+  const [company, setCompany] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [country, setCountry] = React.useState("");
+  const [qty, setQty] = React.useState("");
+  const [port, setPort] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
-  // Trade
-  const [material, setMaterial] = useState("Wastepaper");
-  const [grade, setGrade]       = useState(GRADES[0]);
-  const [qty, setQty]           = useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+  const [err, setErr] = React.useState<string | null>(null);
 
-  // Logistics
-  const [incoterm, setIncoterm] = useState<(typeof INCOTERMS)[number]>(INCOTERMS[0]);
-  const [port, setPort]         = useState("");
-
-  // Message
-  const [message, setMessage] = useState("");
-
-  // UX
-  const [token, setToken]     = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [ok, setOk]           = useState<null | boolean>(null);
-  const [err, setErr]         = useState<string | null>(null);
-  const [honey, setHoney]     = useState("");
-
-  const isWastepaper = useMemo(() => material === "Wastepaper", [material]);
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
+  const gradeDisabled = material !== "Wastepaper";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true); setOk(null); setErr(null);
+    setErr(null);
+
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setErr("Please fill name, email and message.");
+      return;
+    }
+
+    setLoading(true);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          intent, name, company, email, phone, country,
-          material, grade, qty, incoterm, port, message, token, honey,
+          name,
+          company,
+          email,
+          phone,
+          country,
+          material,
+          grade: gradeDisabled ? "(Specify in message for plastics/metals)" : grade,
+          qty,
+          incoterm,
+          port,
+          message,
         }),
       });
-      const data = await res.json();
-      if (!res.ok || !data?.ok) throw new Error(data?.error || "Failed to send");
-      setOk(true);
-      setIntent("general");
-      setName(""); setCompany(""); setEmail(""); setPhone(""); setCountry("");
-      setMaterial("Wastepaper"); setGrade(GRADES[0]); setQty("");
-      setIncoterm(INCOTERMS[0]); setPort(""); setMessage(""); setToken(null);
+      const j = await res.json().catch(() => ({}));
+      if (!res.ok || !j?.ok) throw new Error(j?.error || "Failed to send.");
+      setSent(true);
+      // light reset except name/email (nice UX)
+      setMessage("");
+      setQty("");
     } catch (e: any) {
-      setOk(false); setErr(e?.message || "Unexpected error");
+      setErr(e.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
   }
 
-  // —— Style tokens
-  const wrap   = "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
-  const h1     = "text-[20px] font-semibold tracking-tight text-slate-100";
-  const sub    = "text-[13px] text-slate-300";
-  const card   = "rounded-xl border border-white/10 bg-[--panel] p-6";
-  const base   = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
-  const input  = base + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
-  const select = input + " bg-[--panel]";
-  const hint   = "mt-1 text-[11px] text-slate-400";
-  const trans  = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
-
   return (
-    <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrap}>
-      <div className="px-6 pt-6">
-        <div className="inline-flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.10)]" />
-          <div className={h1}>Tell us about your request</div>
-        </div>
-        <p className={sub + " mt-1"}>We’ll reply within one business day.</p>
+    <form onSubmit={onSubmit} className="grid gap-5 md:gap-6 text-[15px]">
+      {/* Tabs removed for simplicity; grouped cards feel calmer */}
+      <Card title="Contact" hint="We’ll reply within one business day.">
+        <Row>
+          <Field label="Name" required>
+            <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+          </Field>
+          <Field label="Company">
+            <input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" />
+          </Field>
 
-        <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
-          {(["buy","sell","general"] as const).map((i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIntent(i)}
-              className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all ${
-                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
-              }`}
-              aria-pressed={intent === i}
-            >
-              {i === "buy" ? "Buy" : i === "sell" ? "Sell" : "General"}
-            </button>
-          ))}
-        </div>
-      </div>
+          <Field label="Email" required>
+            <input className={inputCls} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
+          </Field>
+          <Field label="Phone">
+            <input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 …" />
+          </Field>
 
-      <form onSubmit={onSubmit} className="px-6 pb-6 pt-4 grid gap-6">
-        <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
+          <Field label="Country">
+            <input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, …" />
+          </Field>
+          <div />{/* spacer keeps rhythm on md+ */}
+        </Row>
+      </Card>
 
-        {/* Blocks in two columns from small screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {/* Contact */}
-          <section className={card}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-4">Contact</h3>
-            <TwoCol>
-              <Col>
-                <Field label="Name *"><input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
-                <Field label="Email *"><input type="email" className={input} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
-                <Field label="Country"><input className={input} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
-              </Col>
-              <Col>
-                <Field label="Company"><input className={input} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
-                <Field label="Phone"><input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
-              </Col>
-            </TwoCol>
-          </section>
-
-          {/* Trade */}
-          <section className={card}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-4">Trade</h3>
-            <TwoCol>
-              <Col>
-                <Field label="Material">
-                  <select className={select} value={material} onChange={(e) => setMaterial(e.target.value)}>
-                    <option>Wastepaper</option>
-                    <option>Plastics</option>
-                    <option>Metals</option>
-                  </select>
-                </Field>
-                <Field label="Quantity">
-                  <input className={input} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
-                </Field>
-              </Col>
-              <Col>
-                <Field label="Grade">
-                  <select
-                    className={select + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
-                    value={grade}
-                    onChange={(e) => setGrade(e.target.value)}
-                    disabled={!isWastepaper}
-                  >
-                    {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-                  </select>
-                  {!isWastepaper && <p className={hint}>For plastics/metals, please mention the exact grade in your message.</p>}
-                </Field>
-              </Col>
-            </TwoCol>
-          </section>
-
-          {/* Logistics */}
-          <section className={card}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-4">Logistics</h3>
-            <TwoCol>
-              <Col>
-                <Field label="Incoterm">
-                  <select className={select} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
-                    {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
-                  </select>
-                </Field>
-              </Col>
-              <Col>
-                <Field label="Port">
-                  <input className={input} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
-                </Field>
-              </Col>
-            </TwoCol>
-          </section>
-
-          {/* Message – span both columns */}
-          <section className={card + " sm:col-span-2"}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-4">Message</h3>
-            <Field label="Message *">
-              <textarea
-                className={input + " min-h-[120px] resize-y leading-6"}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Write a short description — specs, timings, constraints…"
-                required
-                minLength={10}
-              />
-            </Field>
-          </section>
-        </div>
-
-        {/* Turnstile + actions */}
-        <div className="grid sm:grid-cols-[1fr_auto] items-center gap-4">
-          <div className="opacity-90">
-            <Turnstile siteKey={siteKey} onSuccess={(t) => setToken(t)} options={{ theme: "auto" }} />
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.985 }}
-            type="submit"
-            disabled={loading || !token}
-            className="inline-flex items-center justify-center rounded-xl px-4 py-2 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60 shadow-[0_8px_24px_rgba(20,184,166,0.25)]"
+      <Card title="Trade" hint="Tell us what you want to buy or sell.">
+        <Row>
+          <Field label="Material">
+            <select className={inputCls} value={material} onChange={(e) => setMaterial(e.target.value as Material)}>
+              {MATERIALS.map((m) => (
+                <option key={m}>{m}</option>
+              ))}
+            </select>
+          </Field>
+          <Field
+            label="Grade"
+            hint={gradeDisabled ? "For plastics or metals, mention grade/specs in your message." : undefined}
           >
-            {loading ? "Sending…" : "Send message"}
-          </motion.button>
+            <select
+              className={inputCls + (gradeDisabled ? " opacity-60 cursor-not-allowed" : "")}
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              disabled={gradeDisabled}
+            >
+              {WASTE_GRADES.map((g) => (
+                <option key={g}>{g}</option>
+              ))}
+            </select>
+          </Field>
+
+          <Field label="Quantity">
+            <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder="e.g., 10 x 40' HQ" />
+          </Field>
+          <div />{/* keep grid balance */}
+        </Row>
+      </Card>
+
+      <Card title="Logistics">
+        <Row>
+          <Field label="Incoterm">
+            <select className={inputCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as Incoterm)}>
+              {INCOTERMS.map((i) => (
+                <option key={i}>{i}</option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Port">
+            <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
+          </Field>
+        </Row>
+      </Card>
+
+      <Card title="Message" hint="Specs, timings, constraints… (required)">
+        <Field label="Message" required>
+          <textarea
+            rows={5}
+            className={inputCls + " resize-y"}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write a short description — specs, timings, constraints…"
+          />
+        </Field>
+      </Card>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <button
+          disabled={loading}
+          type="submit"
+          className="rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold disabled:opacity-60 hover:opacity-90 transition"
+        >
+          {loading ? "Sending…" : "Send"}
+        </button>
+        {sent && <div className="text-sm text-teal-300">Thanks — we received your message.</div>}
+        {err && <div className="text-sm text-red-400">{err}</div>}
+        <div className="ml-auto text-xs text-[--muted]">
+          By sending this form you agree that we may contact you about your request.
         </div>
-
-        {ok && <p className="text-teal-300 text-sm">Thanks! Your message was sent.</p>}
-        {ok === false && <p className="text-red-400 text-sm">Error: {err ?? "please try again"}</p>}
-      </form>
-    </motion.div>
-  );
-}
-
-/* -------- Layout helpers (FLEX with fixed spacer) -------- */
-
-function TwoCol({ children }: { children: React.ReactNode }) {
-  const [left, right] = Children.toArray(children);
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_3rem_minmax(0,1fr)] gap-y-6">
-      <div className="sm:flex-1 sm:pr-3">{left}</div>
-      {/* <-- REAL spacer so inputs never touch --> */}
-      <div className="hidden md:block" />
-      <div className="sm:flex-1 sm:pl-3">{right}</div>
-    </div>
-  );
-}
-function Col({ children }: { children: React.ReactNode }) {
-  return <div className="space-y-4">{children}</div>;
-}
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="grid gap-2">
-      <span className="text-[11px] font-semibold text-slate-200">{label}</span>
-      <div className="group/input relative">
-        {children}
-        <span className="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within/input:ring-2 group-focus-within/input:ring-[--brand]/40 transition-all duration-200" />
       </div>
-    </label>
+    </form>
   );
 }
