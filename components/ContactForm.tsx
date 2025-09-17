@@ -224,10 +224,10 @@ export default function ContactForm() {
 function TwoCol({ children }: { children: React.ReactNode }) {
   const [left, right] = Children.toArray(children);
   return (
-    <div className="flex flex-col sm:flex-row sm:items-start">
+    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_3rem_minmax(0,1fr)] gap-y-6">
       <div className="sm:flex-1 sm:pr-3">{left}</div>
       {/* <-- REAL spacer so inputs never touch --> */}
-      <div className="hidden sm:block w-8 shrink-0" />
+      <div className="hidden md:block" />
       <div className="sm:flex-1 sm:pl-3">{right}</div>
     </div>
   );
