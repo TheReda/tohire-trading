@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { motion } from "framer-motion";
 
@@ -36,11 +36,11 @@ export default function ContactForm() {
   const [message, setMessage] = useState("");
 
   // UX
-  const [token, setToken]   = useState<string | null>(null);
+  const [token, setToken]     = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [ok, setOk]         = useState<null | boolean>(null);
-  const [err, setErr]       = useState<string | null>(null);
-  const [honey, setHoney]   = useState(""); // honeypot
+  const [ok, setOk]           = useState<null | boolean>(null);
+  const [err, setErr]         = useState<string | null>(null);
+  const [honey, setHoney]     = useState(""); // honeypot
 
   const isWastepaper = useMemo(() => material === "Wastepaper", [material]);
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!;
@@ -74,27 +74,29 @@ export default function ContactForm() {
     }
   }
 
-  /* —— Styling —— */
-  const wrapCls   = "rounded-2xl border border-white/10 bg-white/7 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
-  const titleCls  = "text-[20px] font-semibold tracking-tight text-slate-100";
-  const subCls    = "text-[13px] text-slate-300";
-  const cardCls   = "rounded-xl border border-white/10 bg-[--panel] p-5";
-  const labelCls  = "text-[11px] font-semibold text-slate-200";
-  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
-  const inputCls  = inputBase + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
-  const selectCls = inputCls + " bg-[--panel]";
-  const hintCls   = "mt-1 text-[11px] text-slate-400";
-  const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
+  /* —— Aesthetic system —— */
+  const wrap   = "rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
+  const h1     = "text-[20px] font-semibold tracking-tight text-slate-100";
+  const sub    = "text-[13px] text-slate-300";
+  const card   = "rounded-xl border border-white/10 bg-[--panel] p-6";
+  const label  = "text-[11px] font-semibold text-slate-200";
+  const base   = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200";
+  const input  = base + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
+  const select = input + " bg-[--panel]";
+  const hint   = "mt-1 text-[11px] text-slate-400";
+  const trans  = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
-    <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrapCls}>
+    <motion.div initial={{opacity:0, y:6}} animate={{opacity:1, y:0}} transition={trans} className={wrap}>
       {/* Header */}
       <div className="px-6 pt-6">
         <div className="inline-flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.08)]" />
-          <div className={titleCls}>Tell us about your request</div>
+          <span className="h-1.5 w-1.5 rounded-full bg-[--brand] shadow-[0_0_0_6px_rgba(20,184,166,0.10)]" />
+          <div className={h1}>Tell us about your request</div>
         </div>
-        <p className={subCls + " mt-1"}>We’ll reply within one business day.</p>
+        <p className={sub + " mt-1"}>We’ll reply within one business day.</p>
+
+        {/* Intent pills */}
         <div className="mt-4 inline-flex rounded-full border border-white/10 bg-white/5 p-1">
           {(["buy","sell","general"] as const).map((i) => (
             <button
@@ -102,7 +104,7 @@ export default function ContactForm() {
               type="button"
               onClick={() => setIntent(i)}
               className={`px-3 py-1.5 text-[13px] font-semibold rounded-full transition-all ${
-                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10"
+                intent === i ? "bg-[--brand] text-black shadow" : "text-slate-300 hover:bg-white/10 active:scale-[0.98]"
               }`}
               aria-pressed={intent === i}
             >
@@ -116,71 +118,77 @@ export default function ContactForm() {
         {/* Honeypot */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Blocks grid — 2 columns on xl screens (so we use screen width) */}
+        {/* ——— Blocks in two columns on xl ——— */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {/* Contact block */}
-          <section className={cardCls}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-3">Contact</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
-              <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
-              <Field label="Email *"><input type="email" className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
-              <Field label="Phone"><input className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
-              <Field className="md:col-span-2" label="Country"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
-            </div>
-          </section>
+          {/* Contact */}
+          <SectionCard title="Contact">
+            <TwoCol>
+              <Col>
+                <Field label="Name *"><input className={input} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
+                <Field label="Email *"><input type="email" className={input} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" required /></Field>
+                <Field label="Country"><input className={input} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
+              </Col>
+              <Col>
+                <Field label="Company"><input className={input} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
+                <Field label="Phone"><input className={input} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+212 ..." /></Field>
+              </Col>
+            </TwoCol>
+          </SectionCard>
 
-          {/* Trade block */}
-          <section className={cardCls}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-3">Trade</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <Field label="Material">
-                <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
-                  <option>Wastepaper</option>
-                  <option>Plastics</option>
-                  <option>Metals</option>
-                </select>
-              </Field>
+          {/* Trade */}
+          <SectionCard title="Trade">
+            <TwoCol>
+              <Col>
+                <Field label="Material">
+                  <select className={select} value={material} onChange={(e) => setMaterial(e.target.value)}>
+                    <option>Wastepaper</option>
+                    <option>Plastics</option>
+                    <option>Metals</option>
+                  </select>
+                </Field>
+                <Field label="Quantity">
+                  <input className={input} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
+                </Field>
+              </Col>
+              <Col>
+                <Field label="Grade">
+                  <select
+                    className={select + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
+                    value={grade}
+                    onChange={(e) => setGrade(e.target.value)}
+                    disabled={!isWastepaper}
+                  >
+                    {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
+                  </select>
+                  {!isWastepaper && <p className={hint}>For plastics/metals, please mention the exact grade in your message.</p>}
+                </Field>
+              </Col>
+            </TwoCol>
+          </SectionCard>
 
-              <Field label="Grade">
-                <select
-                  className={selectCls + (isWastepaper ? "" : " opacity-50 cursor-not-allowed")}
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value)}
-                  disabled={!isWastepaper}
-                >
-                  {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-                </select>
-                {!isWastepaper && <p className={hintCls}>For plastics/metals, please mention the exact grade in your message.</p>}
-              </Field>
+          {/* Logistics */}
+          <SectionCard title="Logistics">
+            <TwoCol>
+              <Col>
+                <Field label="Incoterm">
+                  <select className={select} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
+                    {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
+                  </select>
+                </Field>
+              </Col>
+              <Col>
+                <Field label="Port">
+                  <input className={input} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
+                </Field>
+              </Col>
+            </TwoCol>
+          </SectionCard>
 
-              <Field className="md:col-span-2" label="Quantity">
-                <input className={inputCls} value={qty} onChange={(e) => setQty(e.target.value)} placeholder={`e.g., 10 x 40' HQ`} />
-              </Field>
-            </div>
-          </section>
-
-          {/* Logistics block */}
-          <section className={cardCls}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-3">Logistics</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-              <Field label="Incoterm">
-                <select className={selectCls} value={incoterm} onChange={(e) => setIncoterm(e.target.value as (typeof INCOTERMS)[number])}>
-                  {INCOTERMS.map((i) => <option key={i} value={i}>{i}</option>)}
-                </select>
-              </Field>
-              <Field label="Port">
-                <input className={inputCls} value={port} onChange={(e) => setPort(e.target.value)} placeholder="Casablanca / Tanger-Med" />
-              </Field>
-            </div>
-          </section>
-
-          {/* Message block — spans both columns on xl */}
-          <section className={`${cardCls} xl:col-span-2`}>
-            <h3 className="text-sm font-semibold text-slate-100 mb-3">Message</h3>
+          {/* Message — spans both columns */}
+          <SectionCard title="Message" spanBoth>
             <Field label="Message *">
               <textarea
-                className={inputCls + " min-h-[120px] resize-y leading-6"}
+                className={input + " min-h-[120px] resize-y leading-6"}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write a short description — specs, timings, constraints…"
@@ -188,7 +196,7 @@ export default function ContactForm() {
                 minLength={10}
               />
             </Field>
-          </section>
+          </SectionCard>
         </div>
 
         {/* Turnstile + actions */}
@@ -215,20 +223,43 @@ export default function ContactForm() {
   );
 }
 
-function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
-  const trans = { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
+/* ——— Layout helpers ——— */
+
+// Section card with optional 2-col span on xl
+function SectionCard({ title, spanBoth = false, children }: { title: string; spanBoth?: boolean; children: React.ReactNode }) {
   return (
-    <motion.label
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={trans}
-      className={`grid gap-2 mb-2 ${className}`}
-    >
+    <section className={`rounded-xl border border-white/10 bg-[--panel] p-6 ${spanBoth ? "xl:col-span-2" : ""}`}>
+      <h3 className="text-sm font-semibold text-slate-100 mb-4">{title}</h3>
+      {children}
+    </section>
+  );
+}
+
+// True two-column layout with a visible vertical divider + real gutters
+function TwoCol({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative grid grid-cols-1 md:grid-cols-2 gap-y-5 md:gap-x-10">
+      {/* vertical divider only on md+ */}
+      <div className="hidden md:block absolute inset-y-0 left-1/2 w-px bg-white/10 pointer-events-none" />
+      {children}
+    </div>
+  );
+}
+
+// Column wrapper adds inner spacing and side padding to create a gutter
+function Col({ children }: { children: React.ReactNode }) {
+  return <div className="space-y-4 md:px-5">{children}</div>;
+}
+
+// Field wrapper with subtle focus glow
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="grid gap-2">
       <span className="text-[11px] font-semibold text-slate-200">{label}</span>
       <div className="group/input relative">
         {children}
         <span className="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within/input:ring-2 group-focus-within/input:ring-[--brand]/40 transition-all duration-200" />
       </div>
-    </motion.label>
+    </label>
   );
 }
