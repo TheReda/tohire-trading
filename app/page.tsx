@@ -392,13 +392,12 @@ export default function Home() {
       </footer>
 
       {/* Floating quick actions */}
-      {contactOpen <ContactDock /><ContactDock /> (
+      {contactOpen && (
         <Modal title="Contact us" onClose={() => setContactOpen(false)}>
           <div className="max-w-3xl"><ContactForm /></div>
         </Modal>
       )}
       <ContactDock />
-
       {/* Cookie consent */}
       {consent === "unknown" && (
         <div className="fixed bottom-4 inset-x-0 px-4 z-50">
