@@ -73,20 +73,19 @@ export default function ContactForm() {
     }
   }
 
-  /* —— Airbnb-ish, denser inputs + more space between fields —— */
+  /* —— Denser inputs + bigger column gap —— */
   const wrapCls   = "rounded-2xl border border-white/10 bg-white/7 backdrop-blur-sm shadow-[0_10px_30px_rgba(0,0,0,0.22)]";
   const titleCls  = "text-[20px] font-semibold tracking-tight text-slate-100";
   const subCls    = "text-[13px] text-slate-300";
-  const labelCls  = "text-[12px] font-semibold text-slate-200";
-  // SHORTER inputs: py-2, slightly smaller text, same nice focus
-  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[14px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200 ease-out";
-  const inputCls  = inputBase + " px-3 py-2 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
+  const labelCls  = "text-[11px] font-semibold text-slate-200";
+  // MUCH SHORTER inputs: py-1.5, smaller text; still nice focus
+  const inputBase = "w-full rounded-xl border border-white/12 bg-white/5 text-[13px] text-slate-100 placeholder:text-slate-400 outline-none transition-all duration-200 ease-out";
+  const inputCls  = inputBase + " px-3 py-1.5 focus:ring-2 focus:ring-[--brand]/55 focus:border-[--brand]/40 hover:border-white/20";
   const selectCls = inputCls + " bg-[--panel]";
-  const hintCls   = "mt-1 text-[12px] text-slate-400";
-  // More space BETWEEN fields: increase grid vertical gap to 0.875rem (~14px)
-  const rowCls    = "grid md:grid-cols-2 gap-y-3.5 gap-x-[2%]";
+  const hintCls   = "mt-1 text-[11px] text-slate-400";
+  // CLEARER space BETWEEN columns: 1.5rem (~24px) horizontally, a bit tighter vertically
+  const rowCls    = "grid md:grid-cols-2 gap-y-3 gap-x-6";
 
-  // Framer Motion transition (typed cubic-bezier)
   const trans = { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const };
 
   return (
@@ -125,7 +124,7 @@ export default function ContactForm() {
         {/* Honeypot (hidden) */}
         <input type="text" name="website" value={honey} onChange={(e) => setHoney(e.target.value)} className="hidden" tabIndex={-1} autoComplete="off" />
 
-        {/* Contact — denser inputs with bigger inter-field gaps */}
+        {/* Contact */}
         <div className={rowCls}>
           <Field label="Name *"><input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" required minLength={2} /></Field>
           <Field label="Company"><input className={inputCls} value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company (optional)" /></Field>
@@ -134,7 +133,7 @@ export default function ContactForm() {
           <Field label="Country" className="md:col-span-2"><input className={inputCls} value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Morocco, Netherlands, ..." /></Field>
         </div>
 
-        {/* Trade — same spacing */}
+        {/* Trade */}
         <div className={rowCls}>
           <Field label="Material">
             <select className={selectCls} value={material} onChange={(e) => setMaterial(e.target.value)}>
@@ -173,11 +172,11 @@ export default function ContactForm() {
           </Field>
         </div>
 
-        {/* Message (shorter textarea height) */}
+        {/* Message (shorter) */}
         <div>
           <Field label="Message *">
             <textarea
-              className={inputCls + " min-h-[130px] resize-y leading-6"}
+              className={inputCls + " min-h-[110px] resize-y leading-6"}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Write a short description — specs, timings, constraints…"
@@ -185,7 +184,7 @@ export default function ContactForm() {
               minLength={10}
             />
           </Field>
-          <p className="mt-1 text-[12px] text-[--muted]">We’ll reply within 1 business day.</p>
+          <p className="mt-1 text-[11px] text-[--muted]">We’ll reply within 1 business day.</p>
         </div>
 
         {/* Turnstile + actions */}
@@ -198,7 +197,7 @@ export default function ContactForm() {
             whileTap={{ scale: 0.985 }}
             type="submit"
             disabled={loading || !token}
-            className="inline-flex items-center justify-center rounded-xl px-5 py-2.5 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60 shadow-[0_8px_24px_rgba(20,184,166,0.25)]"
+            className="inline-flex items-center justify-center rounded-xl px-4 py-2 font-semibold bg-[--brand] text-black hover:opacity-95 disabled:opacity-60 shadow-[0_8px_24px_rgba(20,184,166,0.25)]"
           >
             {loading ? "Sending…" : "Send message"}
           </motion.button>
@@ -213,7 +212,6 @@ export default function ContactForm() {
 }
 
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
-  // Subtle field-by-field fade-in
   const trans = { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const };
   return (
     <motion.label
@@ -222,10 +220,9 @@ function Field({ label, children, className = "" }: { label: string; children: R
       transition={trans}
       className={`grid gap-1.5 ${className}`}
     >
-      <span className="text-[12px] font-semibold text-slate-200">{label}</span>
+      <span className="text-[11px] font-semibold text-slate-200">{label}</span>
       <div className="group/input relative">
         {children}
-        {/* soft focus glow */}
         <span className="pointer-events-none absolute inset-0 rounded-xl ring-0 group-focus-within/input:ring-2 group-focus-within/input:ring-[--brand]/40 transition-all duration-200" />
       </div>
     </motion.label>
