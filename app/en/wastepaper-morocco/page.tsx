@@ -1,3 +1,4 @@
+import Link from "next/link";
 export const metadata = {
   title: "Wastepaper Trading in Morocco: OCC, NCC, SOP | ToHiRe Trading",
   description: "Morocco-focused wastepaper sourcing and export. OCC, NCC, mixed paper, SOP. EN643 specs, ports Casablanca and Tanger-Med.",
@@ -18,7 +19,7 @@ export default function Page() {
         <summary className="cursor-pointer">Which ports do you serve?</summary>
         <div className="mt-2 text-slate-300">Casablanca and Tanger-Med by default; others on request.</div>
       </details>
-      <a href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</a>
+      <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</Link>
     </main>
   );
 }

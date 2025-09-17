@@ -1,3 +1,4 @@
+import Link from "next/link";
 export const metadata = {
   title: "OCC 1.05 Wastepaper Supplier Morocco | ToHiRe Trading",
   description: "Buy and sell OCC 1.05 (old corrugated containers) in Morocco. EN643-aligned specs, export-ready bales, end-to-end logistics.",
@@ -18,7 +19,7 @@ export default function Page() {
         <li>Incoterms FOB, CFR, CIF, EXW, DAP</li>
         <li>Casablanca, Tanger-Med and other ports on request</li>
       </ul>
-      <a href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</a>
+      <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</Link>
     </main>
   );
 }

@@ -590,3 +590,10 @@ function Modal({
     </div>
   );
 }
+
+
+function gradeHref(code: "1.05"|"4.01"|"1.02"|"2.05", lang: "en"|"fr") {
+  const en: Record<string,string> = { "1.05":"/en/occ","4.01":"/en/shavings-ncc","1.02":"/en/mixed-paper","2.05":"/en/sop-office-paper" };
+  const fr: Record<string,string> = { "1.05":"/fr/occ-carton-maroc","4.01":"/en/shavings-ncc","1.02":"/fr/papiers-melanges","2.05":"/en/sop-office-paper" };
+  return (lang==="fr"?fr:en)[code] || "/";
+}
