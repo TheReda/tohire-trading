@@ -96,9 +96,9 @@ const GRADE_SPECS: Record<
 /* ---------- i18n ---------- */
 const en = {
   nav: { materials: "Materials", solutions: "Solutions", impact: "Impact", resources: "Resources", contact: "Contact" },
-  cta: { sell: "Sell material", buy: "Buy material", explore: "Explore materials" },
+  cta: { sell: "Contact us", buy: "Buy material", explore: "Explore materials" },
   hero: {
-    badge: "Wastepaper • OCC & NCC",
+    badge: "Wastepaper • Plastics • Metals",
     title: "Turning Waste into Worth",
     subtitle:
       "Wastepaper as a core focus — plastics & metals on request. We connect reliable generators with qualified buyers and manage the logistics in between.",
@@ -169,6 +169,7 @@ export default function Home() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [consent, setConsent] = useState<"unknown" | "accepted" | "declined">("unknown");
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("cookieConsent") : null;
@@ -391,6 +392,11 @@ export default function Home() {
       </footer>
 
       {/* Floating quick actions */}
+      {contactOpen <ContactDock /><ContactDock /> (
+        <Modal title="Contact us" onClose={() => setContactOpen(false)}>
+          <div className="max-w-3xl"><ContactForm /></div>
+        </Modal>
+      )}
       <ContactDock />
 
       {/* Cookie consent */}
@@ -546,6 +552,34 @@ function Stats() {
           <div className="text-sm text-slate-300">{s.label}</div>
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ---------- Modal ---------- */
+function Modal({
+  title,
+  onClose,
+  children,
+}: {
+  title: string;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="fixed inset-0 z-[60]">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative h-full w-full grid place-items-center p-4">
+        <div className="w-full max-w-3xl rounded-2xl bg-[--panel] text-white shadow-xl border border-white/10">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+            <div className="font-semibold">{title}</div>
+            <button aria-label="Close" onClick={onClose} className="p-2 rounded-lg hover:bg-white/5">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </button>
+          </div>
+          <div className="px-6 py-5 max-h-[80vh] overflow-y-auto">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }
