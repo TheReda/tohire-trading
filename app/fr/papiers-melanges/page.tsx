@@ -1,9 +1,24 @@
-import Link from "next/link";
 export const metadata = {
   title: "Papiers mélangés 1.02 • Spécifications EN643 • ToHiRe Trading Morocco",
   description: "Mélange trié 1.02, spécifications contractuelles, contrôle de contamination, documents de QA pour l’export.",
-  alternates: { canonical: "https://tohiretrading.com/fr/papiers-melanges", languages: { "fr": "https://tohiretrading.com/fr/papiers-melanges" } }
+  alternates: { canonical: "https://tohiretrading.com/fr/papiers-melanges", languages: { "fr": "https://tohiretrading.com/fr/papiers-melanges", "en": "https://tohiretrading.com/en/mixed-paper" } },
+  openGraph: {
+    title: "Papiers mélangés 1.02 • Spécifications EN643 • ToHiRe Trading Morocco",
+    description: "Mélange trié 1.02, spécifications contractuelles, contrôle de contamination, documents de QA pour l’export.",
+    url: "https://tohiretrading.com/fr/papiers-melanges",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Papiers mélangés 1.02 • Spécifications EN643 • ToHiRe Trading Morocco",
+    description: "Mélange trié 1.02, spécifications contractuelles, contrôle de contamination, documents de QA pour l’export.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
 };
+import Link from "next/link";
+
 export default function Page() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-14">

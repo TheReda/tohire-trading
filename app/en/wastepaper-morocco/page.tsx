@@ -1,9 +1,24 @@
-import Link from "next/link";
 export const metadata = {
   title: "Wastepaper Morocco (OCC) • EN643 Export • ToHiRe Trading Morocco",
   description: "Buy or sell EN643 wastepaper from Morocco (OCC 1.05, Mixed Paper 1.02, SOP 2.05). Fast decisions, compliant export, Europe • Africa • Asia.",
-  alternates: { canonical: "https://tohiretrading.com/en/wastepaper-morocco", languages: { "en": "https://tohiretrading.com/en/wastepaper-morocco" } }
+  alternates: { canonical: "https://tohiretrading.com/en/wastepaper-morocco", languages: { "en": "https://tohiretrading.com/en/wastepaper-morocco" } },
+  openGraph: {
+    title: "Wastepaper Morocco (OCC) • EN643 Export • ToHiRe Trading Morocco",
+    description: "Buy or sell EN643 wastepaper from Morocco (OCC 1.05, Mixed Paper 1.02, SOP 2.05). Fast decisions, compliant export, Europe • Africa • Asia.",
+    url: "https://tohiretrading.com/en/wastepaper-morocco",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wastepaper Morocco (OCC) • EN643 Export • ToHiRe Trading Morocco",
+    description: "Buy or sell EN643 wastepaper from Morocco (OCC 1.05, Mixed Paper 1.02, SOP 2.05). Fast decisions, compliant export, Europe • Africa • Asia.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
 };
+import Link from "next/link";
+
 export default function Page() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-14">

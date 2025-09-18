@@ -1,9 +1,24 @@
-import Link from "next/link";
 export const metadata = {
   title: "OCC 1.05 • EN643 Specs & Export • ToHiRe Trading Morocco",
   description: "Old Corrugated Containers (OCC 1.05) per EN643. Sourcing, QA and logistics for exports to Europe, Africa and Asia.",
-  alternates: { canonical: "https://tohiretrading.com/en/occ", languages: { "en": "https://tohiretrading.com/en/occ" } }
+  alternates: { canonical: "https://tohiretrading.com/en/occ", languages: { "en": "https://tohiretrading.com/en/occ", "fr": "https://tohiretrading.com/fr/occ-carton-maroc" } },
+  openGraph: {
+    title: "OCC 1.05 • EN643 Specs & Export • ToHiRe Trading Morocco",
+    description: "Old Corrugated Containers (OCC 1.05) per EN643. Sourcing, QA and logistics for exports to Europe, Africa and Asia.",
+    url: "https://tohiretrading.com/en/occ",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OCC 1.05 • EN643 Specs & Export • ToHiRe Trading Morocco",
+    description: "Old Corrugated Containers (OCC 1.05) per EN643. Sourcing, QA and logistics for exports to Europe, Africa and Asia.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
 };
+import Link from "next/link";
+
 export default function Page() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-14">

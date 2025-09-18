@@ -1,9 +1,24 @@
-import Link from "next/link";
 export const metadata = {
   title: "Mixed Paper 1.02 • EN643 Specs & Supply • ToHiRe Trading Morocco",
   description: "Sorted mixed papers and boards (1.02). Contract-based specs, contamination control, documented QA.",
-  alternates: { canonical: "https://tohiretrading.com/en/mixed-paper", languages: { "en": "https://tohiretrading.com/en/mixed-paper" } }
+  alternates: { canonical: "https://tohiretrading.com/en/mixed-paper", languages: { "en": "https://tohiretrading.com/en/mixed-paper", "fr": "https://tohiretrading.com/fr/papiers-melanges" } },
+  openGraph: {
+    title: "Mixed Paper 1.02 • EN643 Specs & Supply • ToHiRe Trading Morocco",
+    description: "Sorted mixed papers and boards (1.02). Contract-based specs, contamination control, documented QA.",
+    url: "https://tohiretrading.com/en/mixed-paper",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mixed Paper 1.02 • EN643 Specs & Supply • ToHiRe Trading Morocco",
+    description: "Sorted mixed papers and boards (1.02). Contract-based specs, contamination control, documented QA.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
 };
+import Link from "next/link";
+
 export default function Page() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-14">
