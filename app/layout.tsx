@@ -26,6 +26,32 @@ export const metadata: Metadata = {
 };
 
 
+export const metadata = {
+  title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+  description: "We trade EN643 grades (OCC, NCC, mixed paper, SOP) across Europe, Africa and Asia. Fast decisions, end-to-end logistics, compliant exports.",
+  alternates: {
+    canonical: "https://tohiretrading.com/",
+    languages: {
+      "en": "https://tohiretrading.com/",
+      "fr": "https://tohiretrading.com/"
+    }
+  },
+  openGraph: {
+    title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+    description: "EN643 grades • OCC, NCC, Mixed Paper, SOP • Europe • Africa • Asia • Fast decisions • End-to-end logistics.",
+    url: "https://tohiretrading.com/",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+    description: "EN643 grades • OCC, NCC, Mixed Paper, SOP • Europe • Africa • Asia • Fast decisions • End-to-end logistics.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const jsonLd = {
     "@context": "https://schema.org",
