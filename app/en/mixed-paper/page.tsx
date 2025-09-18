@@ -1,3 +1,5 @@
+import BreadcrumbsLd from "../../../components/BreadcrumbsLd";
+import { Breadcrumbs } from "../../../components/Breadcrumbs";
 import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "Mixed Paper 1.02 • EN643 Specs & Supply • ToHiRe Trading Morocco",
@@ -24,6 +26,9 @@ export default function Page() {
   return (
     
       <main className="max-w-3xl mx-auto px-4 py-14">
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/mixed-paper"}]} />
+
+      <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Mixed Papers and Boards (1.02)</h1>
       <p className="mt-3 text-slate-300">Sorted mix with clear documentary trail and EN643 alignment.</p>
       <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</Link>
