@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "Wastepaper Morocco (OCC) • EN643 Export • ToHiRe Trading Morocco",
   description: "Buy or sell EN643 wastepaper from Morocco (OCC 1.05, Mixed Paper 1.02, SOP 2.05). Fast decisions, compliant export, Europe • Africa • Asia.",

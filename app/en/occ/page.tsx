@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "OCC 1.05 • EN643 Specs & Export • ToHiRe Trading Morocco",
   description: "Old Corrugated Containers (OCC 1.05) per EN643. Sourcing, QA and logistics for exports to Europe, Africa and Asia.",

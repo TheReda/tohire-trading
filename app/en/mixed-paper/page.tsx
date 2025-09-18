@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "Mixed Paper 1.02 • EN643 Specs & Supply • ToHiRe Trading Morocco",
   description: "Sorted mixed papers and boards (1.02). Contract-based specs, contamination control, documented QA.",

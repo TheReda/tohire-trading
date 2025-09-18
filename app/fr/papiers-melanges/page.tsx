@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "Papiers mélangés 1.02 • Spécifications EN643 • ToHiRe Trading Morocco",
   description: "Mélange trié 1.02, spécifications contractuelles, contrôle de contamination, documents de QA pour l’export.",

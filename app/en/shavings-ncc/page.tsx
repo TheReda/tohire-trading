@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "NCC / New Corrugated Shavings 4.01 • EN643 • ToHiRe Trading Morocco",
   description: "New shavings of corrugated board (EN643 4.01). Clean, post-industrial stream with export-ready logistics.",

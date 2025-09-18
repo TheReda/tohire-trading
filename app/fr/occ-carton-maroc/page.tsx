@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "OCC 1.05 Maroc • Spécifications EN643 • Export • ToHiRe Trading Morocco",
   description: "Carton ondulé usagé (OCC 1.05) conforme EN643. Sourcing, contrôle qualité et logistique d’export vers l’Europe, l’Afrique et l’Asie.",

@@ -1,4 +1,4 @@
-import RelatedMaterials from "../../components/RelatedMaterials";
+import RelatedMaterials from "../../../components/RelatedMaterials";
 export const metadata = {
   title: "SOP 2.05 • Sorted Office Paper • EN643 • ToHiRe Trading Morocco",
   description: "SOP 2.05 (mostly wood-free office paper). Consistent quality, bale documentation, export handled end-to-end.",
