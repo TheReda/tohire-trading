@@ -1,3 +1,4 @@
+import RelatedMaterials from "../../components/RelatedMaterials";
 export const metadata = {
   title: "Wastepaper Morocco (OCC) • EN643 Export • ToHiRe Trading Morocco",
   description: "Buy or sell EN643 wastepaper from Morocco (OCC 1.05, Mixed Paper 1.02, SOP 2.05). Fast decisions, compliant export, Europe • Africa • Asia.",
@@ -21,6 +22,8 @@ import Link from "next/link";
 
 export default function Page() {
   return (
+    
+      <RelatedMaterials lang="en" items={[{"href":"/en/occ","label":"OCC 1.05 (Old Corrugated Containers)"},{"href":"/en/mixed-paper","label":"Mixed Paper 1.02"},{"href":"/en/sop-office-paper","label":"SOP 2.05 (Office Paper)"},{"href":"/en/shavings-ncc","label":"NCC / New Corrugated Shavings 4.01"},{"href":"/en/wastepaper-morocco","label":"Wastepaper Morocco (EN643 export)"}]} />
     <main className="max-w-3xl mx-auto px-4 py-14">
       <h1 className="text-3xl font-bold">Wastepaper Trading in Morocco</h1>
       <p className="mt-3 text-slate-300">OCC 1.05, 4.01 shavings, mixed paper 1.02, SOP 2.05. EN643 alignment and full export logistics.</p>
