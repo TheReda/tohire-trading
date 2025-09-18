@@ -1,21 +1,8 @@
 import Link from "next/link";
 export const metadata = {
-  title: "OCC 1.05 Carton Ondulé — Maroc | ToHiRe Trading",
-  description: "Achat/vente d’OCC 1.05 au Maroc. Spécifications EN643, balles prêtes à l’export, logistique complète.",
-  alternates: {
-    canonical: "https://tohiretrading.com/en/occ",
-    languages: {
-      "en": "https://tohiretrading.com/en/occ",
-      "fr": "https://tohiretrading.com/fr/occ-carton-maroc"
-    }
-  },
-  openGraph: {
-    title: "OCC 1.05 Carton Ondulé — Maroc | ToHiRe Trading",
-    description: "Achat/vente d’OCC 1.05 au Maroc. Spécifications EN643, balles prêtes à l’export, logistique complète.",
-    url: "https://tohiretrading.com/en/occ",
-    images: ["https://tohiretrading.com/og.png"],
-    type: "website"
-  }
+  title: "OCC 1.05 Maroc • Spécifications EN643 • Export • ToHiRe Trading Morocco",
+  description: "Carton ondulé usagé (OCC 1.05) conforme EN643. Sourcing, contrôle qualité et logistique d’export vers l’Europe, l’Afrique et l’Asie.",
+  alternates: { canonical: "https://tohiretrading.com/fr/occ-carton-maroc", languages: { "fr": "https://tohiretrading.com/fr/occ-carton-maroc" } }
 };
 export default function Page() {
   return (
