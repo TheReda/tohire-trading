@@ -23,8 +23,7 @@ import Link from "next/link";
 export default function Page() {
   return (
     
-      <RelatedMaterials lang="en" items={[{"href":"/en/occ","label":"OCC 1.05 (Old Corrugated Containers)"},{"href":"/en/mixed-paper","label":"Mixed Paper 1.02"},{"href":"/en/sop-office-paper","label":"SOP 2.05 (Office Paper)"},{"href":"/en/shavings-ncc","label":"NCC / New Corrugated Shavings 4.01"},{"href":"/en/wastepaper-morocco","label":"Wastepaper Morocco (EN643 export)"}]} />
-    <main className="max-w-3xl mx-auto px-4 py-14">
+      <main className="max-w-3xl mx-auto px-4 py-14">
       <h1 className="text-3xl font-bold">OCC 1.05 Wastepaper — Morocco</h1>
       <p className="mt-3 text-slate-300">EN643-aligned OCC with strict contamination control, moisture per EN643, export-ready packing.</p>
       <h2 className="mt-8 text-xl font-semibold">Specifications</h2>
@@ -39,6 +38,8 @@ export default function Page() {
         <li>Casablanca, Tanger-Med and other ports on request</li>
       </ul>
       <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</Link>
+    
+      <RelatedMaterials lang="en" items={[{"href":"/en/occ","label":"OCC 1.05 (Old Corrugated Containers)"},{"href":"/en/mixed-paper","label":"Mixed Paper 1.02"},{"href":"/en/sop-office-paper","label":"SOP 2.05 (Office Paper)"},{"href":"/en/shavings-ncc","label":"NCC / New Corrugated Shavings 4.01"},{"href":"/en/wastepaper-morocco","label":"Wastepaper Morocco (EN643 export)"}]} />
     </main>
   );
 }
