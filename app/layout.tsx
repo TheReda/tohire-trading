@@ -1,4 +1,3 @@
-<script key="ld-org" type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"ToHiRe Trading Morocco","url":"https://tohiretrading.com/","logo":"https://tohiretrading.com/og.png","contactPoint":{"@type":"ContactPoint","email":"contact@tohiretrading.com","contactType":"sales"}}</script>
 <script key="ld-site" type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","url":"https://tohiretrading.com/","name":"ToHiRe Trading Morocco","potentialAction":{"@type":"SearchAction","target":"https://tohiretrading.com/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 import type { Metadata } from "next";
 

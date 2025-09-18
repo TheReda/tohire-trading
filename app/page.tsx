@@ -197,8 +197,8 @@ export default function Home() {
   }, [consent]);
 
   return (
-    <div className=
-      <SeoLd />"min-h-screen bg-[--bg] text-[--fg] [--bg:#0b0f14] [--panel:#0f1520] [--muted:#94a3b8] [--brand:#14b8a6] [--brand-2:#0ea5e9]">
+    <div className="min-h-screen bg-[--bg] text-[--fg] [--bg:#0b0f14] [--panel:#0f1520] [--muted:#94a3b8] [--brand:#14b8a6] [--brand-2:#0ea5e9]">
+      <SeoLd />
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur bg-[--bg]/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
