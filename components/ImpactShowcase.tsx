@@ -9,7 +9,7 @@ const t = { duration: 0.45, ease: "easeOut" } as const;
 export default function ImpactShowcase({ title, subtitle, points, note }: Props) {
   const stats = [
     { label: "Tons per year", value: ">20,000" },
-    { label: "Regions served", value: "EMEA • Far East • Asia" },
+    { label: "Regions served", value: "Europe • Africa • Asia" },
     { label: "Docs on-time", value: "100%" },
     { label: "Logistics", value: "End-to-end handled" },
   ];
@@ -50,7 +50,7 @@ export default function ImpactShowcase({ title, subtitle, points, note }: Props)
               <div className="rounded-lg border border-white/10 bg-black/20 px-2 py-1">Export lanes</div>
               <div className="rounded-lg border border-white/10 bg-black/20 px-2 py-1">Casablanca • Tanger-Med</div>
             </div>
-            <motion.div className="ship-track" initial={{ x: "-120%" }} animate={{ x: "120%" }} transition={{ duration: 24, ease: "linear", repeat: Infinity }}>
+            <motion.div className="ship-track" initial={{ x: "-60vw" }} animate={{ x: "60vw" }} transition={{ duration: 28, ease: "linear", repeat: Infinity }}>
               <div className="ship">
                 <svg viewBox="0 0 220 60" width="220" height="60" className="drop-shadow-[0_6px_10px_rgba(0,0,0,.4)]">
                   <g>
