@@ -26,10 +26,10 @@ export default function Page() {
   return (
     
       <main className="max-w-3xl mx-auto px-4 py-14">
-      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:"Wastepaper Morocco (EN643 export)",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
 
       <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
-      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:"Wastepaper Morocco (EN643 export)",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
 
       <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Wastepaper Trading in Morocco</h1>

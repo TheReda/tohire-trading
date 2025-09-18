@@ -26,10 +26,10 @@ export default function Page() {
   return (
     
       <main className="max-w-3xl mx-auto px-4 py-14">
-      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
+      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:"Papiers mélangés (1.02)",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
 
       <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
-      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
+      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:"Papiers mélangés (1.02)",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
 
       <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Papiers et Cartons Mélangés (1.02)</h1>

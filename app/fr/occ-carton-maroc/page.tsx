@@ -26,10 +26,10 @@ export default function Page() {
   return (
     
       <main className="max-w-3xl mx-auto px-4 py-14">
-      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/occ-carton-maroc"}]} />
+      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:"Carton OCC 1.05 — Maroc",url:"https://tohiretrading.com/fr/occ-carton-maroc"}]} />
 
       <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
-      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/occ-carton-maroc"}]} />
+      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:"Carton OCC 1.05 — Maroc",url:"https://tohiretrading.com/fr/occ-carton-maroc"}]} />
 
       <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">OCC 1.05 Carton Ondulé — Maroc</h1>
