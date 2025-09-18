@@ -91,7 +91,7 @@ export default function ImpactShowcase({ title, subtitle, points, note }: Props)
               className="ship-track"
               initial={{ x: "-60vw" }}
               animate={{ x: "60vw" }}
-              transition={{ duration: 28, ease: "linear", repeat: Infinity }}
+              transition={{  duration: 9, ease: "linear", repeat: Infinity  }}
             >
               <svg viewBox="0 0 220 60" width="220" height="60" className="drop-shadow-[0_6px_10px_rgba(0,0,0,.4)]">
                 <g>
