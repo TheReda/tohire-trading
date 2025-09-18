@@ -1,6 +1,33 @@
+export const metadata = {
+  title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+  description: "We trade EN643 grades (OCC, NCC, mixed paper, SOP) across Europe, Africa and Asia. Fast decisions, end-to-end logistics, compliant exports.",
+  alternates: {
+    canonical: "https://tohiretrading.com/",
+    languages: {
+      "en": "https://tohiretrading.com/",
+      "fr": "https://tohiretrading.com/"
+    }
+  },
+  openGraph: {
+    title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+    description: "EN643 grades • OCC, NCC, Mixed Paper, SOP • Europe • Africa • Asia • Fast decisions • End-to-end logistics.",
+    url: "https://tohiretrading.com/",
+    siteName: "ToHiRe Trading Morocco",
+    images: ["https://tohiretrading.com/og.png"],
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Wastepaper (OCC) Export • Recycling Broker • ToHiRe Trading Morocco",
+    description: "EN643 grades • OCC, NCC, Mixed Paper, SOP • Europe • Africa • Asia • Fast decisions • End-to-end logistics.",
+    images: ["https://tohiretrading.com/og.png"]
+  }
+};
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+
+import Link from "next/link";
 import Image from "next/image";
 import ContactForm from "../components/ContactForm";
 import ImpactShowcase from "../components/ImpactShowcase";
@@ -486,7 +513,7 @@ function GradeCard({ g, lang }: { g: Grade; lang: LangKey }) {
           priority={g.code === "1.05"}
         />
       </div>
-      <div className="mt-3 font-semibold"><a href={gradeHref(g.code, lang)} className="hover:underline">{g.code} — {g.title}</a></div>
+      <div className="mt-3 font-semibold"><Link href={gradeHref(g.code, lang)} className="hover:underline">{g.code} — {g.title}</Link></div>
       <p className="mt-1 text-sm text-[--muted]">{g.desc[lang]}</p>
 
       <div className="mt-3 rounded-lg border border-white/10 p-3 bg-[--panel]">
