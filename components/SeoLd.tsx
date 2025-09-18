@@ -1,8 +1,0 @@
-export default function SeoLd(){
-  return (
-    <>
-      <script key="ld-service" type="application/ld+json">{"@context":"https://schema.org","@type":"Service","name":"Wastepaper (OCC) Trading & Export","serviceType":"Recycling brokerage","areaServed":["Europe","Africa","Asia"],"provider":{"@type":"Organization","name":"ToHiRe Trading Morocco","url":"https://tohiretrading.com/"},"availableChannel":{"@type":"ServiceChannel","serviceUrl":"https://tohiretrading.com/#contact"},"termsOfService":"https://tohiretrading.com/"}</script>
-      <script key="ld-faq" type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Which EN643 grades do you trade?","acceptedAnswer":{"@type":"Answer","text":"OCC 1.05, NCC/shavings 4.01, Mixed Paper 1.02, SOP 2.05, and related wastepaper streams."}},{"@type":"Question","name":"Which regions do you serve?","acceptedAnswer":{"@type":"Answer","text":"We operate across Europe, Africa, and Asia with export-ready logistics."}},{"@type":"Question","name":"What Incoterms are available?","acceptedAnswer":{"@type":"Answer","text":"FOB, CFR, CIF, EXW, and DAP depending on lane and volume."}},{"@type":"Question","name":"How do I request a quote?","acceptedAnswer":{"@type":"Answer","text":"Use the Contact button on the homepage or email contact@tohiretrading.com with material, grade, quantity, and port."}}]}</script>
-    </>
-  );
-}
