@@ -29,6 +29,9 @@ export default function Page() {
       <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
 
       <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
+      <BreadcrumbsLd items={[{name:"Accueil",url:"https://tohiretrading.com/"},{name:"Matériaux",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/fr/papiers-melanges"}]} />
+
+      <Breadcrumbs items={[{name: "Accueil", href: "/"}, {name: "Matériaux", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Papiers et Cartons Mélangés (1.02)</h1>
       <p className="mt-3 text-slate-300">Flux trié, conformité EN643, documentation claire.</p>
       <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Nous contacter</Link>

@@ -29,6 +29,9 @@ export default function Page() {
       <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
 
       <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/wastepaper-morocco"}]} />
+
+      <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Wastepaper Trading in Morocco</h1>
       <p className="mt-3 text-slate-300">OCC 1.05, 4.01 shavings, mixed paper 1.02, SOP 2.05. EN643 alignment and full export logistics.</p>
       <h2 className="mt-8 text-xl font-semibold">Why ToHiRe</h2>

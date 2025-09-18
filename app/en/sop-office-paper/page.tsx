@@ -29,6 +29,9 @@ export default function Page() {
       <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/sop-office-paper"}]} />
 
       <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/sop-office-paper"}]} />
+
+      <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">Sorted Office Paper (2.05)</h1>
       <p className="mt-3 text-slate-300">Consistent SOP feedstock for mills. Documentation and QA included.</p>
       <Link href="/#contact" className="inline-block mt-8 rounded-xl bg-[--brand] text-black px-5 py-2.5 font-semibold">Contact us</Link>

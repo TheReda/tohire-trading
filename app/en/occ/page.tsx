@@ -29,6 +29,9 @@ export default function Page() {
       <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/occ"}]} />
 
       <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
+      <BreadcrumbsLd items={[{name:"Home",url:"https://tohiretrading.com/"},{name:"Materials",url:"https://tohiretrading.com/#materials"},{name:document?.title||"",url:"https://tohiretrading.com/en/occ"}]} />
+
+      <Breadcrumbs items={[{name: "Home", href: "/"}, {name: "Materials", href: "/#materials"}]} />
       <h1 className="text-3xl font-bold">OCC 1.05 Wastepaper — Morocco</h1>
       <p className="mt-3 text-slate-300">EN643-aligned OCC with strict contamination control, moisture per EN643, export-ready packing.</p>
       <h2 className="mt-8 text-xl font-semibold">Specifications</h2>
